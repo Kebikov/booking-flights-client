@@ -1,0 +1,21 @@
+@import '../../scss/mixin.scss';
+@import '../../scss/variables.scss';
+
+.navbar-menu {
+    // .navbar-menu__body
+    &__body {
+        display:flex;
+        gap: 20px;
+
+        background-color: $color-header-bg;
+        padding: 10px 0px 10px 0px;
+    }
+    // .navbar-menu__link
+    &__link {
+        @include text_streach(22, 20, #ffffffd2, 500,'Mont');
+    }
+}
+
+._link-blue {
+    color: $color-header-title;
+}

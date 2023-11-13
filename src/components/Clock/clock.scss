@@ -1,0 +1,37 @@
+@import '../../scss/mixin.scss';
+@import '../../scss/variables.scss';
+
+.clock {
+    margin: 10px 10px 0px 0px;
+
+    display: flex;
+    justify-content: flex-end;
+    // .clock__boby
+    &__boby {
+        display: flex;
+
+        border: 2px solid $color-header-bg;
+        padding: 10px;
+    }
+    // .clock__date
+    &__date {
+        @include text_streach (14, 12, #434343, 600, 'Mont');
+    }
+    // .clock__title
+    &__title {
+        text-align: center;
+    }
+    // .clock__day
+    &__day {
+    }
+    // .clock__time
+    &__time {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 0px 0px 0px 10px;
+
+        @include text_streach (17, 15, #434343, 600, 'Mont');
+    }
+}

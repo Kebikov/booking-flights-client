@@ -1,0 +1,42 @@
+@import './variables.scss';
+
+//= text_title 
+@mixin text_title ($size-1, $size-2, $size-3, $color, $weight:400) {
+        font-family: "Roboto";
+        font-size: $size-1 + px;
+        font-weight: $weight;
+        color: $color;
+        line-height: 120%;
+
+        @media (min-width: 2000px){
+            font-size: $size-2 + px;
+        }
+
+        @media (max-width: 760px){
+            font-size: $size-3 + px;
+        }
+}
+
+//= text_streach 
+@mixin text_streach ($max, $min, $color, $w:500, $font: "Roboto") {
+    font-family: $font;
+    font-size: $max + px;
+    font-weight: $w;
+    color: $color;
+    line-height: 120%;
+
+    @media (max-width: 1910px){
+        font-size: calc(#{$min}px + (#{$max - $min}) * (100vw - 375px) / 1535);
+    }
+    @media (max-width: 375px){
+        font-size: $min + px;
+    }
+}
+
+
+
+
+
+
+
+
