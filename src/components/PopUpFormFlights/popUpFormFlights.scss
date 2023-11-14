@@ -1,0 +1,9 @@
+.popup-form-flights {
+    &__body {
+        display: flex;
+        justify-content: center;
+    }
+    &__col {
+        width: 500px;
+    }
+}

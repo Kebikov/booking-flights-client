@@ -14,10 +14,24 @@ const Header = () => {
                     OUR MENU
                 </div>
                 <div className="navbar-menu__link">
-                    <NavLink to={'/'} className="navbar-menu__link" >Рейсы</NavLink>
+                    <NavLink 
+                        to={'/'} 
+                        className="navbar-menu__link" 
+                        end 
+                        style={(({isActive}) => ({textDecoration: isActive ? 'underline' : 'none'}))}
+                    >
+                        Рейсы
+                    </NavLink>
                 </div>
                 <div className="navbar-menu__link">
-                    <NavLink to={'/booking'} className="navbar-menu__link" >Бронь</NavLink>
+                    <NavLink 
+                        to={'/booking'} 
+                        className="navbar-menu__link" 
+                        end 
+                        style={(({isActive}) => ({textDecoration: isActive ? 'underline' : 'none'}))}
+                    >
+                        Бронь
+                    </NavLink>
                 </div>
             </div>
         </nav>

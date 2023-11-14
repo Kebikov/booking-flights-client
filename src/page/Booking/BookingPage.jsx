@@ -1,16 +1,35 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './bookingPage.scss';
-import fakeData from '../../data/fakeData';
+import { useState, useEffect } from 'react';
+import convertFormatData from '../../helpers/convertFormatData';
+import { httpSQL } from '../../service/http.service';
 
 
 /**
- * Page > забронированные рейсы :
- * - данными забронированных рейсов клиентами
- * @component
- */
+* Page > забронированные рейсы :
+* - данными забронированных рейсов клиентами
+* @component
+*/
 const BookingPage = () => {
 
-    const infoBooking = fakeData.map((order, i) => {
+    /**
+    * @typedef {Object} BookingData
+    * @property {string} route - id рейса
+    * @property {string} surname - фамилия пасажира
+    * @property {string} name - имя пасажира
+    * @property {string} middleName - отчество пасажира
+    * @property {string} date - фамилия пасажира
+    * @property {number} sit - номер места пасажира
+    * @property {string} note - примечание
+    */
+
+    /**
+    * dataBooking - массив обьектов с данными бронирования
+    * @type {[BookingData[], React.Dispatch<React.SetStateAction<BookingData[]>>]}
+    */
+    const [dataBooking, setDataBooking] = useState([]);
+
+    const infoBooking = dataBooking.map((order, i) => {
         return(
             <tr key={i} >
                 
@@ -18,12 +37,19 @@ const BookingPage = () => {
                 <td>{order?.surname ? order.surname : '-'}</td>
                 <td>{order?.name ? order.name : '-'}</td>
                 <td>{order?.middleName ? order.middleName : '-'}</td>
-                <td>{order?.date ? order.date :  '-'}</td>
+                <td>{order?.date ? convertFormatData(order.date) :  '-'}</td>
                 <td>{order?.sit ? order.sit : '-'}</td>
                 <td>{order?.note ? order.note : '-'}</td>
             </tr>
         );
     });
+
+    useEffect(() => {
+        httpSQL
+            .get('/booking-data')
+            .then(res => setDataBooking(res.data))
+            .catch(error => console.error(error));
+    },[]);
 
     return(
         <div className="table-booking">
