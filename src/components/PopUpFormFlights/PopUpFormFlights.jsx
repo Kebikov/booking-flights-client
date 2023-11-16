@@ -1,17 +1,18 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './popUpFormFlights.scss';
-import changeInputDeley from '../../helpers/changeInputDeley.js';
-import { useState } from 'react';
+
+import delayFnc from '../../helpers/delay.js';
+import useFormFlights from '../../hooks/useFormFlights.js';
 
 const PopUpFormFlights = () => {
-    const [stateForm, setStateForm] = useState({});
+
+    const {changeInput, stateClassInputDate} = useFormFlights();
 
     const submitFormFlights = (event) => { 
         event.preventDefault();
-        console.log(event.target);
     };
 
-    s
+    const changeInputDelay = (event) => delayFnc(changeInput(event), 1000);
 
     return(
         <div className="popup-form-flights">
@@ -22,7 +23,7 @@ const PopUpFormFlights = () => {
                         <label htmlFor="route" className="form-label">Рейс</label>
                         <input 
                             id="route" 
-                            onChange={changeInputDeley}
+                            onChange={changeInputDelay}
                             type="text" 
                             className="form-control" 
                             maxLength="16" 
@@ -41,6 +42,7 @@ const PopUpFormFlights = () => {
                         <label htmlFor="city" className="form-label">Город</label>
                         <input 
                             id="city" 
+                            onChange={changeInputDelay}
                             type="text" 
                             className="form-control"
                             maxLength="32"
@@ -56,34 +58,36 @@ const PopUpFormFlights = () => {
                     </div>
                     {/*//* дата */}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="date" className="form-label">Дата рейса</label>
+                        <label htmlFor="dateRoute" className="form-label">Дата рейса</label>
                         <input 
-                            id="date" 
+                            id="dateRoute" 
+                            onChange={changeInputDelay}
                             type="date" 
-                            className="form-control"
+                            className={stateClassInputDate}
                             // required
                         />
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="city" className="invalid-feedback">
-                            Выберите другую дату или время.
+                        <div id="dateRoute" className="invalid-feedback">
+                            Выберите другую дату или время рейса.
                         </div>
                     </div>
                     {/*//* время */}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="time" className="form-label">Время рейса</label>
+                        <label htmlFor="timeRoute" className="form-label">Время рейса</label>
                         <input 
-                            id="time"
+                            id="timeRoute"
+                            onChange={changeInputDelay}
                             type="time" 
-                            className="form-control"
+                            className={stateClassInputDate}
                             // required
                         />
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="city" className="invalid-feedback">
-                            Выберите другую дату или время.
+                        <div id="timeRoute" className="invalid-feedback">
+                            Выберите другую дату или время рейса.
                         </div>
                     </div>
                     {/*//* Количество свободных мест */}
@@ -107,9 +111,9 @@ const PopUpFormFlights = () => {
                     </div>
                     {/*//* дата регистрации*/}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="dateReg" className="form-label">Дата регистрации</label>
+                        <label htmlFor="dateRegistration" className="form-label">Дата регистрации</label>
                         <input 
-                            id="dateReg" 
+                            id="dateRegistration" 
                             type="date" 
                             className="form-control"
                             // required
@@ -121,11 +125,11 @@ const PopUpFormFlights = () => {
                             Регистрация минимум за 30 минут до рейса.
                         </div>
                     </div>
-                    {/*//* время */}
+                    {/*//* время регистрации*/}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="timeReg" className="form-label">Время рейса</label>
+                        <label htmlFor="timeRegistration" className="form-label">Время рейса</label>
                         <input 
-                            id="timeReg" 
+                            id="timeRegistration" 
                             type="time" 
                             className="form-control"
                             // required
@@ -133,7 +137,7 @@ const PopUpFormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="city" className="invalid-feedback">
+                        <div id="timeRegistration" className="invalid-feedback">
                             Регистрация минимум за 30 минут до рейса.
                         </div>
                     </div>
@@ -141,7 +145,8 @@ const PopUpFormFlights = () => {
                     <div className="col-md-4 mt-2 popup-form-flights__col">
                         <label htmlFor="note" className="form-label">Примечание</label>
                         <input 
-                            id="note" 
+                            id="note"
+                            onChange={changeInputDelay}
                             type="text" 
                             className="form-control"
                             maxLength="64"
