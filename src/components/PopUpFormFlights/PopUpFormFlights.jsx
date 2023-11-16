@@ -1,17 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './popUpFormFlights.scss';
+import changeInputDeley from '../../helpers/changeInputDeley.js';
 
 const PopUpFormFlights = () => {
 
-    const changeInput = (event) => {
-        const id = event.target.id;
-        const value = event.target.value;
-
-        console.log(id);
-        console.log(value);
-    };
-
-    const submitFormFlights = (event) => {
+    const submitFormFlights = (event) => { 
         event.preventDefault();
         console.log(event.target);
     };
@@ -25,7 +18,7 @@ const PopUpFormFlights = () => {
                         <label htmlFor="reys" className="form-label">Рейс</label>
                         <input 
                             id="reys" 
-                            onChange={changeInput}
+                            onChange={changeInputDeley}
                             type="text" 
                             className="form-control" 
                             maxLength="16" 
@@ -62,7 +55,6 @@ const PopUpFormFlights = () => {
                         <label htmlFor="date" className="form-label">Дата рейса</label>
                         <input 
                             id="date" 
-                            onChange={changeInput}
                             type="date" 
                             className="form-control"
                             // required
@@ -79,7 +71,6 @@ const PopUpFormFlights = () => {
                         <label htmlFor="time" className="form-label">Время рейса</label>
                         <input 
                             id="time"
-                            onChange={changeInput} 
                             type="time" 
                             className="form-control"
                             // required
