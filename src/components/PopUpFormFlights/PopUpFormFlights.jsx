@@ -1,13 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './popUpFormFlights.scss';
 import changeInputDeley from '../../helpers/changeInputDeley.js';
+import { useState } from 'react';
 
 const PopUpFormFlights = () => {
+    const [stateForm, setStateForm] = useState({});
 
     const submitFormFlights = (event) => { 
         event.preventDefault();
         console.log(event.target);
     };
+
+    s
 
     return(
         <div className="popup-form-flights">
@@ -15,9 +19,9 @@ const PopUpFormFlights = () => {
                 <form className="form-floating" onSubmit={submitFormFlights} >
                     {/*//* рейс */}
                     <div className="col-md-4 popup-form-flights__col">
-                        <label htmlFor="reys" className="form-label">Рейс</label>
+                        <label htmlFor="route" className="form-label">Рейс</label>
                         <input 
-                            id="reys" 
+                            id="route" 
                             onChange={changeInputDeley}
                             type="text" 
                             className="form-control" 
@@ -28,7 +32,7 @@ const PopUpFormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="reys" className="invalid-feedback">
+                        <div id="route" className="invalid-feedback">
                             Введите уникальное имя рейса.
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import FlightsPage from '../page/Flights/FlightsPage';
 import BookingPage from '../page/Booking/BookingPage';
 import Header from '../components/Header/Header';
