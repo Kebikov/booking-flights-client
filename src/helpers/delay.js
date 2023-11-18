@@ -1,8 +1,9 @@
+
 const delay = () => {
     let timeOut;
     return (someFunction, timeDelay) => {
-            clearTimeout(timeOut);
-            timeOut = setTimeout(() => someFunction(), timeDelay);
+        clearTimeout(timeOut);
+        timeOut = setTimeout(() => someFunction(), timeDelay);
     };
 };
 /**

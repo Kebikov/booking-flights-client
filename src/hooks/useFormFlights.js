@@ -7,7 +7,20 @@ const useFormFlights = () => {
     /** Состояние для хранения всех данных формы
     * @type {[Types.StateForm, function(Types.StateForm): void]}
     */
-    const [stateForm, setStateForm] = useState({});
+    const [stateForm, setStateForm] = useState({
+        id: '',
+        value: '-',
+        target: '',
+        route: '',
+        city: '',
+        dateRoute: '',
+        timeRoute: '',
+        freePlace: '',
+        company: '',
+        dateRegistration: '',
+        timeRegistration: '',
+        note: ''
+    });
 
     /** Состояние хранения класа для полей даты вылета
     * @typedef {'form-control' | 'form-control is-valid' | 'form-control is-invalid'} DateClass
@@ -20,6 +33,11 @@ const useFormFlights = () => {
     */
     const [stateClassDateRegistration, setStateClassDateRegistration] = useState('form-control');
 
+    const deleteAddedClasses = () => {
+        stateForm.target.classList.remove('is-valid');
+        stateForm.target.classList.remove('is-invalid');
+    };
+
     /** Функция отслежеваюшая изминения состояния input
     * @param {Event} event обьект события
     * @return {void}
@@ -30,85 +48,63 @@ const useFormFlights = () => {
             const target = event.target;
             const id = target.id;
             const value = target.value;
-            
-            const deleteAddedClasses = () => {
-                target.classList.remove('is-valid');
-                target.classList.remove('is-invalid');
-            };
-
-            const inputObjectPost = {
-                field: id,
-                value: value
-            };
-
-            //* если значение пустае удаляем все доп.класы
-            if(value === '') {
-                deleteAddedClasses();
-                return;
-            }
-
-            //* если id есть в исключениях, просто добавляем данные в state и добавляем класс успешной проверки
-            const exception = ['city', 'company', 'note'];
-            if(exception.includes(id)) {
-                setStateForm(state => ( {...state, [id]: value, id, target} ));
-                target.classList.add('is-valid');
-                return;
-            }
-
-            //* проверка свободных мест
-            if(id === 'freePlace') {
-                const sit = Number(value);
-                if(!isNaN(sit) && typeof sit === 'number' && sit < 100 && sit >= 0) {
-                    deleteAddedClasses();
-                    target.classList.add('is-valid');
-                    setStateForm(state => ( {...state, [id]: value, id, target} ));
-                } else {
-                    deleteAddedClasses();
-                    target.classList.add('is-invalid');
-                }
-            }
-
-            //* добавление данных вылета
-            if(id === 'dateRoute' || id === 'timeRoute') {
-                console.log('id = ', id);
-                console.log('value = ', value);
-                setStateForm(state => ( {...state, [id]: value, id, target} ));
-            }
-
-            //* добавление регистрации рейса
-            if(id === 'dateRegistration' || id === 'timeRegistration') {
-                setStateForm(state => ( {...state, [id]: value, id, target} ));
-                return;
-            }
-    
-            //* проверка уникальности введенного значения
-            if(id === 'route') {
-                setStateForm(state => ( {...state, [id]: value, id, target} ));
-
-                httpSQL
-                    .post('/check-form-flights', inputObjectPost)
-                    .then(res => {
-                        const msg = res.data?.msg;
-                        if(msg === undefined || msg === 'route not found') return;
-                        if(msg) {
-                            deleteAddedClasses();
-                            target.classList.add('is-valid');
-                        } else {
-                            deleteAddedClasses();
-                            target.classList.add('is-invalid');
-                        }
-                    })
-                    .catch(error => console.error(error));
-            } 
+            console.log(id, value);
+            setStateForm(state => ( {...state, [id]: value, id, target, value} ));
         };
     };
 
 
     useEffect(() => {
+
+        //* если значение пустае удаляем все доп.класы
+        if(stateForm.value === '') {
+            deleteAddedClasses();
+            return;
+        }
+
+        //* проверка свободных мест
+        if(stateForm.id === 'freePlace') {
+            const sit = Number(stateForm.freePlace);
+            if(!isNaN(sit) && typeof sit === 'number' && sit < 100 && sit >= 0) {
+                deleteAddedClasses();
+                stateForm.target.classList.add('is-valid');
+            } else {
+                deleteAddedClasses();
+                stateForm.target.classList.add('is-invalid');
+            }
+        }
+
+        //* если id есть в исключениях, просто добавляем данные в state и добавляем класс успешной проверки
+        const exception = ['city', 'company', 'note'];
+        if(exception.includes(stateForm.id)) {
+            stateForm.target.classList.add('is-valid');
+            return;
+        }
+
+        //* проверка уникальности введенного значения
+        if(stateForm.id === 'route') {
+            console.log(stateForm.value);
+            httpSQL
+                .post('/check-form-flights', {field: stateForm.id, value: stateForm.value})
+                .then(res => {
+                    const msg = res.data?.msg;
+                    if(msg === undefined || msg === 'route not found') return;
+                    if(msg) {
+                        deleteAddedClasses();
+                        stateForm.target.classList.add('is-valid');
+                    } else {
+                        deleteAddedClasses();
+                        stateForm.target.classList.add('is-invalid');
+                    }
+                })
+                .catch(error => console.error(error));
+        } 
+
+
         
         //* проверка разрешон ли вылет в данное время, не более 2-х в одно итоже время и дату
         if(stateForm.id === 'dateRoute' || stateForm.id === 'timeRoute') {
-            console.log(111);
+            
             if(stateForm.dateRoute && stateForm.timeRoute) {
                 // формируем дату в формате 2023-12-12T09:00:00
                 // данные в state {"timeRoute": "22:59","dateRoute": "2023-11-08"}
@@ -130,13 +126,11 @@ const useFormFlights = () => {
         }
 
         if(stateForm.id === 'dateRegistration' || stateForm.id === 'timeRegistration') {
-            console.log(stateForm.id);
             checkTime();
         }
 
 
         function checkTime() {
-            console.log('fnc checkTime');
             //* проверка разницы времени вылета и регистрации, если есть все необходимые данные
             if(stateForm.dateRoute && stateForm.timeRoute && stateForm.dateRegistration && stateForm.timeRegistration) {
                 const min30 = 30 * 60 * 1000;

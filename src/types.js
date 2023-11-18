@@ -9,7 +9,8 @@
 
 /**
 * @typedef {Object} StateForm
-* @property {string} id - id текушего редактируемого поля
+* @property {string} id - id текушего редактируемого поля, полученое из id(input)
+* @property {string | number} value - последнее добавленое значение в форму
 * @property {object} target - обьект текушего редактируемого поля
 * @property {string} route - id рейса
 * @property {string} city - город назначения

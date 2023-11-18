@@ -24,7 +24,7 @@ const PopUpEditFormFlights = ({id}) => {
     /** Результат использования функции useFormFlights.
      * @type {Types.UseFormFlights} */ 
     const {stateForm, setStateForm, changeInput, stateClassInputDate, stateClassDateRegistration} = useFormFlights();
-    console.log(stateForm);
+    
     /** Результат использования функции useFormFlights.
     * @property {Types.FlightsData[]} curentDataFlights - Массив со всеми рейсами.
     * @property {function} updateAllFlights - Функция обновления данных о рейсах.
@@ -58,34 +58,31 @@ const PopUpEditFormFlights = ({id}) => {
         }
     };
 
-    const test = (event) => {
-        const target = event.target;
-        const id = target.id;
-        const value = target.value;
-        setStateForm(state => ( {...state, [id]: value, id, target} ));
-    };
-
     const changeInputDelay = (event) => delayFnc(changeInput(event), 500);
 
+    
     useEffect(() => {
 
-        /** editFlights - обьект с данными рейса
-        * @type {Types.FlightsData} */
-        const editFlights = curentDataFlights.find(flights => flights.id === id);
-        
-        const state = {
-            route: editFlights?.route,
-            city: editFlights?.city,
-            dateRoute: editFlights?.date.slice(0, 10),
-            timeRoute: editFlights?.date.slice(11, 16), 
-            company: editFlights?.company,
-            dateRegistration: editFlights?.checkIn.slice(0, 10),
-            timeRegistration: editFlights?.checkIn.slice(11, 16),
-            freePlace: editFlights?.freePlace,
-            note: editFlights?.note 
-        };
+        if(Array.isArray(curentDataFlights) && curentDataFlights.length > 0) {
+            
+            /** editFlights - обьект с данными рейса
+            * @type {Types.FlightsData} */
+            const editFlights = curentDataFlights.find(flights => flights.id === id);
+            
+            const state = {
+                route: editFlights?.route,
+                city: editFlights?.city,
+                dateRoute: editFlights?.date.slice(0, 10),
+                timeRoute: editFlights?.date.slice(11, 16), 
+                company: editFlights?.company,
+                dateRegistration: editFlights?.checkIn.slice(0, 10),
+                timeRegistration: editFlights?.checkIn.slice(11, 16),
+                freePlace: editFlights?.freePlace,
+                note: editFlights?.note 
+            };
 
-        setStateForm(state);
+            setStateForm(state);
+        }
 
     },[curentDataFlights]);
 
@@ -106,7 +103,7 @@ const PopUpEditFormFlights = ({id}) => {
                             id="route" 
                             type="text"
                             className="form-control" 
-                            value={stateForm?.route ?? 'нет данных'}
+                            value={stateForm.route}
                             readOnly
                         />
                     </div>
@@ -117,7 +114,7 @@ const PopUpEditFormFlights = ({id}) => {
                             id="city" 
                             type="text" 
                             className="form-control"
-                            value={stateForm?.city ?? 'нет данных'}
+                            value={stateForm.city}
                             readOnly
                         />
                     </div>
@@ -126,10 +123,10 @@ const PopUpEditFormFlights = ({id}) => {
                         <label htmlFor="dateRoute" className="form-label">Дата рейса</label>
                         <input 
                             id="dateRoute" 
-                            onChange={test}
+                            onChange={changeInputDelay}
                             type="date" 
                             className={stateClassInputDate}
-                            value={stateForm?.dateRoute ?? ''}
+                            value={stateForm.dateRoute}
                             autoComplete="off"
                             required
                         />
@@ -148,7 +145,7 @@ const PopUpEditFormFlights = ({id}) => {
                             onChange={changeInputDelay}
                             type="time" 
                             className={stateClassInputDate}
-                            value={stateForm?.timeRoute ?? ''}
+                            value={stateForm.timeRoute}
                             required
                         />
                         <div className="valid-feedback">
@@ -165,7 +162,7 @@ const PopUpEditFormFlights = ({id}) => {
                             id="company"
                             type="text"
                             className="form-control"
-                            value={stateForm?.company ?? 'нет данных'}
+                            value={stateForm.company}
                             readOnly
                         />
                     </div>
@@ -176,7 +173,7 @@ const PopUpEditFormFlights = ({id}) => {
                             id="freePlace"
                             type="text"
                             className="form-control"
-                            value={stateForm?.freePlace ?? 'нет данных'}
+                            value={stateForm.freePlace}
                             readOnly
                         />
                     </div>
@@ -188,7 +185,7 @@ const PopUpEditFormFlights = ({id}) => {
                             onChange={changeInputDelay}
                             type="date"
                             className={stateClassDateRegistration}
-                            value={stateForm?.dateRegistration ?? ''}
+                            value={stateForm.dateRegistration}
                             required
                         />
                         <div className="valid-feedback">
@@ -206,7 +203,7 @@ const PopUpEditFormFlights = ({id}) => {
                             onChange={changeInputDelay}
                             type="time" 
                             className={stateClassDateRegistration}
-                            value={stateForm?.timeRegistration ?? ''}
+                            value={stateForm.timeRegistration}
                             required
                         />
                         <div className="valid-feedback">
@@ -224,7 +221,7 @@ const PopUpEditFormFlights = ({id}) => {
                             onChange={changeInputDelay}
                             type="text" 
                             className="form-control"
-                            value={stateForm?.note ?? 'нет данных'}
+                            value={stateForm.note}
                             readOnly
                         />
                     </div>
