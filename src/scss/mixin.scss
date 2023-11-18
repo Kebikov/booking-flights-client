@@ -18,7 +18,7 @@
 }
 
 //= text_streach 
-@mixin text_streach ($max, $min, $color, $w:500, $font: "Roboto") {
+@mixin text_streach ($max, $min, $color, $w:500, $font: "Mont") {
     font-family: $font;
     font-size: $max + px;
     font-weight: $w;

@@ -1,18 +1,53 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './popUpFormFlights.scss';
 
+import { useNavigate } from 'react-router-dom';
+import { httpSQL } from '../../service/http.service.js';
+
 import delayFnc from '../../helpers/delay.js';
 import useFormFlights from '../../hooks/useFormFlights.js';
 
+/**
+* COMPONENT > Форма для добавления рейса в БД
+* @component
+* @example
+* Пример использования компонента <PopUpFormFlights/>:
+* <PopUpFormFlights/>
+*/
 const PopUpFormFlights = () => {
 
-    const {changeInput, stateClassInputDate} = useFormFlights();
+    const {stateForm, changeInput, stateClassInputDate, stateClassDateRegistration} = useFormFlights();
+
+    const navigate = useNavigate();
 
     const submitFormFlights = (event) => { 
         event.preventDefault();
+        const form = event.target;
+        const isInvalidElements = form.querySelectorAll('.is-invalid');
+
+        if(isInvalidElements?.length === 0) {
+            const bodyForm = {
+                route: stateForm.route,
+                city: stateForm.city,
+                date: `${stateForm.dateRoute}T${stateForm.timeRoute}:00`, 
+                company: stateForm.company,
+                checkIn: `${stateForm.dateRegistration}T${stateForm.timeRegistration}:00`,
+                freePlace: Number (stateForm.freePlace),
+                note: stateForm?.note ?? '' 
+            };
+            httpSQL
+                .post('/form-flights', bodyForm)
+                .then(res => {
+                    form.reset();
+                    navigate(-1);
+                })
+                .catch(error => console.error(error));
+        } else {
+            console.log('нет');
+        }
     };
 
-    const changeInputDelay = (event) => delayFnc(changeInput(event), 1000);
+    const changeInputDelay = (event) => delayFnc(changeInput(event), 500);
 
     return(
         <div className="popup-form-flights">
@@ -28,7 +63,8 @@ const PopUpFormFlights = () => {
                             className="form-control" 
                             maxLength="16" 
                             placeholder="max 16 символов"
-                            // required
+                            autoComplete="off"
+                            required
                         />
                         <div className="valid-feedback">
                             ok!
@@ -47,7 +83,8 @@ const PopUpFormFlights = () => {
                             className="form-control"
                             maxLength="32"
                             placeholder="max 32 символа"
-                            // required
+                            autoComplete="off"
+                            required
                         />
                         <div className="valid-feedback">
                             ok!
@@ -64,7 +101,8 @@ const PopUpFormFlights = () => {
                             onChange={changeInputDelay}
                             type="date" 
                             className={stateClassInputDate}
-                            // required
+                            autoComplete="off"
+                            required
                         />
                         <div className="valid-feedback">
                             ok!
@@ -81,7 +119,7 @@ const PopUpFormFlights = () => {
                             onChange={changeInputDelay}
                             type="time" 
                             className={stateClassInputDate}
-                            // required
+                            required
                         />
                         <div className="valid-feedback">
                             ok!
@@ -90,22 +128,41 @@ const PopUpFormFlights = () => {
                             Выберите другую дату или время рейса.
                         </div>
                     </div>
-                    {/*//* Количество свободных мест */}
+                    {/*//* Авиакомпания */}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="sit" className="form-label">Количество свободных мест</label>
+                        <label htmlFor="company" className="form-label">Авиакомпания</label>
                         <input 
-                            id="sit" 
-                            type="number"
-                            min={0}
-                            max={99}
+                            id="company"
+                            onChange={changeInputDelay} 
+                            type="text"
                             className="form-control"
-                            placeholder="max 99 мест"
-                            // required
+                            maxLength="32"
+                            placeholder="max 32 символа"
+                            autoComplete="off"
+                            required
                         />
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="city" className="invalid-feedback">
+                        <div id="company" className="invalid-feedback">
+                            Error
+                        </div>
+                    </div>
+                    {/*//* Количество свободных мест */}
+                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                        <label htmlFor="freePlace" className="form-label">Количество свободных мест</label>
+                        <input 
+                            id="freePlace"
+                            onChange={changeInputDelay} 
+                            type="text"
+                            className="form-control"
+                            placeholder="max 99 мест"
+                            required
+                        />
+                        <div className="valid-feedback">
+                            ok!
+                        </div>
+                        <div id="freePlace" className="invalid-feedback">
                             max 99 мест в самолете
                         </div>
                     </div>
@@ -114,14 +171,15 @@ const PopUpFormFlights = () => {
                         <label htmlFor="dateRegistration" className="form-label">Дата регистрации</label>
                         <input 
                             id="dateRegistration" 
+                            onChange={changeInputDelay}
                             type="date" 
-                            className="form-control"
-                            // required
+                            className={stateClassDateRegistration}
+                            required
                         />
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="city" className="invalid-feedback">
+                        <div id="dateRegistration" className="invalid-feedback">
                             Регистрация минимум за 30 минут до рейса.
                         </div>
                     </div>
@@ -130,9 +188,10 @@ const PopUpFormFlights = () => {
                         <label htmlFor="timeRegistration" className="form-label">Время рейса</label>
                         <input 
                             id="timeRegistration" 
+                            onChange={changeInputDelay}
                             type="time" 
-                            className="form-control"
-                            // required
+                            className={stateClassDateRegistration}
+                            required
                         />
                         <div className="valid-feedback">
                             ok!
@@ -155,11 +214,19 @@ const PopUpFormFlights = () => {
                         />
                     </div>
                     <button type="submit" className="btn btn-primary mt-4">отправить</button>
+                    <button 
+                        type="submit" 
+                        className="btn btn-secondary mt-4" 
+                        style={{marginLeft: '20px'}} 
+                        onClick={() => navigate(-1)}
+                    >
+                        отмена
+                    </button>
                 </form>
+                
             </div>
         </div>
     );
 };
 
-// is-invalid is-valid
 export default PopUpFormFlights;

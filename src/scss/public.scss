@@ -1,0 +1,6 @@
+@import './mixin.scss';
+
+.title-page {
+    text-align: center;
+    @include text_streach (24, 20, #000);
+}
