@@ -1,20 +1,28 @@
 
-const delay = () => {
+
+const delay = (someFunction, timeDelay) => {
     let timeOut;
-    return (someFunction, timeDelay) => {
+    console.log('del');
+    return function () {
         clearTimeout(timeOut);
-        timeOut = setTimeout(() => someFunction(), timeDelay);
+        function call() {
+            someFunction.call(this);
+        };
+        timeOut = setTimeout(() => {
+            call();
+        }, timeDelay);
     };
 };
 /**
 * Функция задержки выполнения переденной функции.
 * @param {Function} someFunction Функция выполнение которой надо отложить на установленое время.
 * @param {number} timeDelay Время задержки в мс.
-* @return {Function} Вернет функцию которая задержит выполнение переданной функции.
-* @example Пример использования delayFnc :
-* const btn = document.getElementById('button');
-* btn.addEventListener('click', () => delayFnc(fncClick, 1000));
 */
-const delayFnc = delay();
 
-export default delayFnc;
+export default delay;
+
+
+
+
+
+

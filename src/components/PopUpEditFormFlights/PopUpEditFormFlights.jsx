@@ -5,7 +5,7 @@ import * as Types from '../../types.js'; // eslint-disable-line
 import { useNavigate } from 'react-router-dom';
 import { httpSQL } from '../../service/http.service.js';
 
-import delayFnc from '../../helpers/delay.js';
+import delay from '../../helpers/delay.js';
 import useFormFlights from '../../hooks/useFormFlights.js';
 import useGetAllFlights from '../../hooks/useGetAllFlights.js';
 import { useEffect } from 'react';
@@ -24,7 +24,7 @@ const PopUpEditFormFlights = ({id}) => {
     /** Результат использования функции useFormFlights.
      * @type {Types.UseFormFlights} */ 
     const {stateForm, setStateForm, changeInput, stateClassInputDate, stateClassDateRegistration} = useFormFlights();
-    
+    console.log(stateForm);
     /** Результат использования функции useFormFlights.
     * @property {Types.FlightsData[]} curentDataFlights - Массив со всеми рейсами.
     * @property {function} updateAllFlights - Функция обновления данных о рейсах.
@@ -58,8 +58,7 @@ const PopUpEditFormFlights = ({id}) => {
         }
     };
 
-    const changeInputDelay = (event) => delayFnc(changeInput(event), 500);
-
+    const changeInputDelay = delay(changeInput, 500);
     
     useEffect(() => {
 
@@ -103,8 +102,9 @@ const PopUpEditFormFlights = ({id}) => {
                             id="route" 
                             type="text"
                             className="form-control" 
+                            onChange={changeInput}
                             value={stateForm.route}
-                            readOnly
+                            //readOnly
                         />
                     </div>
                     {/*//* город */}

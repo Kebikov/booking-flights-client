@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { httpSQL } from '../service/http.service.js';
 import * as Types from '../types.js'; // eslint-disable-line 
+import delay from '../helpers/delay.js';
 
 const useFormFlights = () => {
 
@@ -43,19 +44,22 @@ const useFormFlights = () => {
     * @return {void}
     */
     const changeInput = (event) => {
-        
-        return () => {
-            const target = event.target;
-            const id = target.id;
-            const value = target.value;
-            console.log(id, value);
-            setStateForm(state => ( {...state, [id]: value, id, target, value} ));
-        };
+        const target = event.target;
+        const id = target.id;
+        const value = target.value;
+        setStateForm(state => ( {...state, [id]: value, id, target, value} ));
     };
+
+    
+    const dalayCheckData = delay(checkData, 1500);
 
 
     useEffect(() => {
+        dalayCheckData();
+    }, [stateForm]);
 
+    function checkData() {
+        console.log('checkData');
         //* если значение пустае удаляем все доп.класы
         if(stateForm.value === '') {
             deleteAddedClasses();
@@ -99,8 +103,6 @@ const useFormFlights = () => {
                 })
                 .catch(error => console.error(error));
         } 
-
-
         
         //* проверка разрешон ли вылет в данное время, не более 2-х в одно итоже время и дату
         if(stateForm.id === 'dateRoute' || stateForm.id === 'timeRoute') {
@@ -128,25 +130,23 @@ const useFormFlights = () => {
         if(stateForm.id === 'dateRegistration' || stateForm.id === 'timeRegistration') {
             checkTime();
         }
+    }
 
-
-        function checkTime() {
-            //* проверка разницы времени вылета и регистрации, если есть все необходимые данные
-            if(stateForm.dateRoute && stateForm.timeRoute && stateForm.dateRegistration && stateForm.timeRegistration) {
-                const min30 = 30 * 60 * 1000;
-                const timeFlightsRoute = `${stateForm.dateRoute}T${stateForm.timeRoute}:00`;
-                const timeFlightsRegistration = `${stateForm.dateRegistration}T${stateForm.timeRegistration}:00`;
-                const timeDifference = new Date(timeFlightsRoute).getTime() - new Date(timeFlightsRegistration).getTime();
-                
-                if(timeDifference >= min30) {
-                    setStateClassDateRegistration('form-control is-valid');
-                } else {
-                    setStateClassDateRegistration('form-control is-invalid');
-                }
+    function checkTime() {
+        //* проверка разницы времени вылета и регистрации, если есть все необходимые данные
+        if(stateForm.dateRoute && stateForm.timeRoute && stateForm.dateRegistration && stateForm.timeRegistration) {
+            const min30 = 30 * 60 * 1000;
+            const timeFlightsRoute = `${stateForm.dateRoute}T${stateForm.timeRoute}:00`;
+            const timeFlightsRegistration = `${stateForm.dateRegistration}T${stateForm.timeRegistration}:00`;
+            const timeDifference = new Date(timeFlightsRoute).getTime() - new Date(timeFlightsRegistration).getTime();
+            
+            if(timeDifference >= min30) {
+                setStateClassDateRegistration('form-control is-valid');
+            } else {
+                setStateClassDateRegistration('form-control is-invalid');
             }
         }
-
-    }, [stateForm]);
+    }
 
     return {
         stateForm,
