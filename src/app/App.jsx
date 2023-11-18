@@ -8,6 +8,7 @@ import Clock from '../components/Clock/Clock';
 import Spiner from '../components/Spiner/Spiner';
 
 const AddFlights = lazy(() => import('../page/AddFlights/AddFlights'));
+const EditFlights = lazy(() => import('../page/EditFlights/EditFlights'));
 
 
 const App = () =>  {
@@ -22,7 +23,8 @@ const App = () =>  {
                         <Routes>
                             <Route path="/" element={<FlightsPage/>}/>
                             <Route path="/booking" element={<BookingPage/>}/>
-                            <Route path="/add-Flights" element={<AddFlights/>}/>
+                            <Route path="/add-flights" element={<AddFlights/>}/>
+                            <Route path="/edit-flights/:id" element={<EditFlights/>}/>
                         </Routes>
                     </Suspense>
                 </main>

@@ -3,46 +3,30 @@ import '../Booking/bookingPage.scss';
 
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import convertFormatData from '../../helpers/convertFormatData';
 import { httpSQL } from '../../service/http.service';
+import LineForTableFlights from '../../components/LineForTableFlights/LineForTableBooking';
+import HeaderForTableBooking from '../../components/HeaderForTableBooking/HeaderForTableBooking';
+import useGetAllFlights from '../../hooks/useGetAllFlights';
 
 
 /**
- * Page > данными рейсов :
- * - редактирование рейсов
- * @component
- */
+* Page > c данными рейсов :
+* - редактирование рейсов
+* @component
+* @example
+* <FlightsPage/>
+*/
 //-- FlightsPage 
 const FlightsPage = () => {
 
-    /**
-    * @typedef {Object} FlightsData
-    * @property {string} route - id рейса
-    * @property {string} city - город назначения
-    * @property {string} date - дата и время вылета
-    * @property {string} company - комания перевозчик
-    * @property {string} checkIn - крайний срок регистрации на рейс
-    * @property {number} freePlace - количество свободных мест в самолете
-    * @property {string} note - примечание
-    */
+    const navigate = useNavigate();
+    const {updateAllFlights, curentDataFlights} = useGetAllFlights();
 
     /**
-    * dataBooking - массив обьектов с данными бронирования
-    * @type {[FlightsData[], React.Dispatch<React.SetStateAction<FlightsData[]>>]}
-    */
-    const [dataFlights, setDataFlights] = useState([]);
-    /**
-    * choiceFlights -  id выбранного обьекта для редактирования или удаления
+    * choiceFlights - id выбранного обьекта для редактирования или удаления
     * @type {[number, React.Dispatch<React.SetStateAction<number>>]}
     */
     const [choiceFlights, setChoiceFlights] = useState(null);
-    /**
-    * componentUpdate - переключатель для запроса обновленных данных с сервера
-    * @type {[boolean, React.Dispatch<React.SetStateAction<boolean>>]}
-    */
-    const [componentUpdate, setComponentUpdate] = useState(true);
-
-    const navigate = useNavigate();
 
     const editElement = (event) => {
         const idElement = Number(event.target.id);
@@ -65,7 +49,7 @@ const FlightsPage = () => {
                 const msg = res.data?.msg;
                 if(msg === 'Рейс удален.') {
                     setChoiceFlights(null);
-                    setComponentUpdate(state => !state);
+                    updateAllFlights();
                 } else {
                     setChoiceFlights(null);
                     alert(`${msg}`);
@@ -74,51 +58,20 @@ const FlightsPage = () => {
             .catch(error => console.error(error));
     };
 
-
-    // className='bg-secondary text-white'
-
-    const infoBooking = dataFlights.map((order, i) => {
-        return(
-            <tr key={i} >
-                <td 
-                    id={order?.id} 
-                    onClick={editElement} 
-                    className={order?.id === choiceFlights ? 'bg-secondary text-white' : ''}
-                >
-                    {order?.route ? order.route : '-'}
-                </td>
-                <td>{order?.city  ? order.city : '-'}</td>
-                <td>{order?.date ? convertFormatData(order.date) : '-'}</td>
-                <td>{order?.company ? order.company : '-'}</td>
-                <td>{order?.checkIn ? convertFormatData(order.checkIn) :  '-'}</td>
-                <td>{order?.freePlace ? order.freePlace : '-'}</td>
-                <td>{order?.note ? order.note : '-'}</td>
-            </tr>
-        );
-    });
+    const infoBooking = curentDataFlights.map((order, i) => 
+        <LineForTableFlights order={order} edit={editElement} choice={choiceFlights} key={i} />
+    );
 
     useEffect(() => {
-        httpSQL
-            .get('/flights-data')
-            .then(res => setDataFlights(res.data))
-            .catch(error => console.error(error));
-    },[componentUpdate]);
+        updateAllFlights();
+    },[]); // eslint-disable-line 
 
     return(
         <>
             <div className="table-booking">
                 <table className="table">
                     <thead>
-                        <tr>
-                            
-                            <th scope="col">РЕЙС</th>
-                            <th scope="col">ГОРОД(АЭРОПОРТ)</th>
-                            <th scope="col">ДАТА И ВРЕМЯ</th>
-                            <th scope="col">АВИАКОМПАНИЯ</th>
-                            <th scope="col">РЕГИСТРАЦИЯ ДО</th>
-                            <th scope="col">КОЛ-ВО МЕСТ*</th>
-                            <th scope="col">ПРИМЕЧАНИЯ</th>
-                        </tr>
+                        <HeaderForTableBooking/>
                     </thead>
                     <thead>
                         <tr>
@@ -155,11 +108,22 @@ const FlightsPage = () => {
                             <button 
                                 type="button" 
                                 className="btn btn-outline-primary"
-                                onClick={() => navigate('/add-Flights')}
+                                onClick={() => navigate('/add-flights')}
                             >
                                 add
                             </button>
-                            <button type="button" className="btn btn-outline-primary">edit</button>
+                            <button 
+                                type="button" 
+                                className="btn btn-outline-primary"
+                                onClick={
+                                    choiceFlights ?
+                                        () => navigate(`/edit-flights/${choiceFlights}`)
+                                        :
+                                        null
+                                }
+                            >
+                                edit
+                            </button>
                             <button type="button" className="btn btn-outline-primary" onClick={deleteElement}>del</button>
                         </div>
                     </div>

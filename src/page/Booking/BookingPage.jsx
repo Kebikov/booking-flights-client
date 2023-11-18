@@ -32,7 +32,6 @@ const BookingPage = () => {
     const infoBooking = dataBooking.map((order, i) => {
         return(
             <tr key={i} >
-                
                 <td>{order?.route ? order.route : '-'}</td>
                 <td>{order?.surname ? order.surname : '-'}</td>
                 <td>{order?.name ? order.name : '-'}</td>

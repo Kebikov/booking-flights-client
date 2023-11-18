@@ -5,9 +5,9 @@ import '../../scss/public.scss';
 * PAGE > Страница с формой для добавления рейса в БД
 * @component
 * @example
-* Пример использования компонента <AddFlights/>:
 * <AddFlights/>
 */
+//-- AddFlights 
 const AddFlights = () => {
     return(
         <>

@@ -1,53 +1,36 @@
 import { useState, useEffect } from 'react';
 import { httpSQL } from '../service/http.service.js';
+import * as Types from '../types.js'; // eslint-disable-line 
 
 const useFormFlights = () => {
-    /**
-    * @typedef {Object} StateForm
-    * @property {string} id - id текушего редактируемого поля
-    * @property {object} target - обьект текушего редактируемого поля
-    * @property {string} route - id рейса
-    * @property {string} city - город назначения
-    * @property {string} dateRoute - дата вылета
-    * @property {string} timeRoute - время вылета
-    * @property {number} freePlace - количество свободных мест
-    * @property {number} company - перевозчик
-    * @property {string} dateRegistration - дата регистрации
-    * @property {string} timeRegistration - время регистрации
-    * @property {string} note - примечание
-    */
-    /**
-    * @type {[StateForm, React.Dispatch<React.SetStateAction<StateForm>>]}
-    * @description Состояние для хранения всех данных формы
+
+    /** Состояние для хранения всех данных формы
+    * @type {[Types.StateForm, function(Types.StateForm): void]}
     */
     const [stateForm, setStateForm] = useState({});
 
-    /**
-    * Состояние хранения класа для полей даты вылета
+    /** Состояние хранения класа для полей даты вылета
     * @typedef {'form-control' | 'form-control is-valid' | 'form-control is-invalid'} DateClass
     * @type {[DateClass, function(DateClass): void]}
     */
     const [stateClassInputDate, setStateClassInputDate] = useState('form-control'); 
 
-    /**
-    * Состояние хранения класа для полей даты регистрации
+    /** Состояние хранения класа для полей даты регистрации
     * @type {[DateClass, function(DateClass): void]}
     */
     const [stateClassDateRegistration, setStateClassDateRegistration] = useState('form-control');
 
-    /**
-    * Функция преобразует строку с временем в минуты
+    /** Функция отслежеваюшая изминения состояния input
     * @param {Event} event обьект события
-    * @return {void} ни чего не возврашает
+    * @return {void}
     */
-
     const changeInput = (event) => {
         
         return () => {
             const target = event.target;
             const id = target.id;
             const value = target.value;
-
+            
             const deleteAddedClasses = () => {
                 target.classList.remove('is-valid');
                 target.classList.remove('is-invalid');
@@ -87,6 +70,8 @@ const useFormFlights = () => {
 
             //* добавление данных вылета
             if(id === 'dateRoute' || id === 'timeRoute') {
+                console.log('id = ', id);
+                console.log('value = ', value);
                 setStateForm(state => ( {...state, [id]: value, id, target} ));
             }
 
@@ -118,11 +103,12 @@ const useFormFlights = () => {
         };
     };
 
-    useEffect(() => {
 
+    useEffect(() => {
+        
         //* проверка разрешон ли вылет в данное время, не более 2-х в одно итоже время и дату
         if(stateForm.id === 'dateRoute' || stateForm.id === 'timeRoute') {
-
+            console.log(111);
             if(stateForm.dateRoute && stateForm.timeRoute) {
                 // формируем дату в формате 2023-12-12T09:00:00
                 // данные в state {"timeRoute": "22:59","dateRoute": "2023-11-08"}
@@ -134,6 +120,7 @@ const useFormFlights = () => {
                         if(msg === undefined || msg === 'route not found') return;
                         if(msg) {
                             setStateClassInputDate('form-control is-valid');
+                            checkTime();
                         } else {
                             setStateClassInputDate('form-control is-invalid');
                         }
@@ -142,17 +129,26 @@ const useFormFlights = () => {
             }
         }
 
-        //* проверка разницы времени вылета и регистрации, если есть все необходимые данные
-        if(stateForm.dateRoute && stateForm.timeRoute && stateForm.dateRegistration && stateForm.timeRegistration) {
-            const min30 = 30 * 60 * 1000;
-            const timeFlightsRoute = `${stateForm.dateRoute}T${stateForm.timeRoute}:00`;
-            const timeFlightsRegistration = `${stateForm.dateRegistration}T${stateForm.timeRegistration}:00`;
-            const timeDifference = new Date(timeFlightsRoute).getTime() - new Date(timeFlightsRegistration).getTime();
-            
-            if(timeDifference >= min30) {
-                setStateClassDateRegistration('form-control is-valid');
-            } else {
-                setStateClassDateRegistration('form-control is-invalid');
+        if(stateForm.id === 'dateRegistration' || stateForm.id === 'timeRegistration') {
+            console.log(stateForm.id);
+            checkTime();
+        }
+
+
+        function checkTime() {
+            console.log('fnc checkTime');
+            //* проверка разницы времени вылета и регистрации, если есть все необходимые данные
+            if(stateForm.dateRoute && stateForm.timeRoute && stateForm.dateRegistration && stateForm.timeRegistration) {
+                const min30 = 30 * 60 * 1000;
+                const timeFlightsRoute = `${stateForm.dateRoute}T${stateForm.timeRoute}:00`;
+                const timeFlightsRegistration = `${stateForm.dateRegistration}T${stateForm.timeRegistration}:00`;
+                const timeDifference = new Date(timeFlightsRoute).getTime() - new Date(timeFlightsRegistration).getTime();
+                
+                if(timeDifference >= min30) {
+                    setStateClassDateRegistration('form-control is-valid');
+                } else {
+                    setStateClassDateRegistration('form-control is-invalid');
+                }
             }
         }
 
@@ -160,6 +156,7 @@ const useFormFlights = () => {
 
     return {
         stateForm,
+        setStateForm,
         changeInput,
         stateClassInputDate,
         stateClassDateRegistration
@@ -167,4 +164,6 @@ const useFormFlights = () => {
 };
 
 export default useFormFlights;
+
+
 

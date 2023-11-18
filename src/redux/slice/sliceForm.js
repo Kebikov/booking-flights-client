@@ -1,19 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    formFlights: {}
+    curentDataFlights: []
 };
 
 const sliceForm = createSlice({
     name: 'sliceForm',
     initialState,
     reducers: {
-        setReduxFormFlights: (state, actions) => {
-            if(actions.payload === 'clian') {
-                state.orderAdmin = {};
-            }else{
-                state.orderAdmin = {...state.orderAdmin, ...actions.payload};
-            }
+        setCurentDataFlights: (state, actions) => {
+            state.curentDataFlights = actions.payload;
         }
     }
 });
@@ -23,5 +19,5 @@ const {reducer, actions} = sliceForm;
 export default reducer;
 
 export const {
-    setReduxFormFlights
+    setCurentDataFlights
 } = actions;
