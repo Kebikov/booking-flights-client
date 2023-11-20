@@ -1,15 +1,10 @@
 
-
-const delay = (someFunction, timeDelay) => {
+const delay = () => {
     let timeOut;
-    console.log('del');
-    return function () {
+    return function (someFunction, timeDelay) {
         clearTimeout(timeOut);
-        function call() {
-            someFunction.call(this);
-        };
         timeOut = setTimeout(() => {
-            call();
+            someFunction();
         }, timeDelay);
     };
 };
@@ -19,7 +14,9 @@ const delay = (someFunction, timeDelay) => {
 * @param {number} timeDelay Время задержки в мс.
 */
 
-export default delay;
+const delayFnc = delay();
+
+export default delayFnc;
 
 
 

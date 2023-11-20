@@ -1,5 +1,5 @@
 import '../../scss/public.scss';
-import PopUpEditFormFlights from '../../components/PopUpEditFormFlights/PopUpEditFormFlights';
+import PopUpEditFormFlights from '../../components/EditFormFlights/EditFormFlights';
 import { useParams } from 'react-router-dom';
 
 /**

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { httpSQL } from '../service/http.service.js';
 import * as Types from '../types.js'; // eslint-disable-line 
-import delay from '../helpers/delay.js';
+import delayFnc from '../helpers/delay.js';
 
 const useFormFlights = () => {
 
@@ -10,7 +10,7 @@ const useFormFlights = () => {
     */
     const [stateForm, setStateForm] = useState({
         id: '',
-        value: '-',
+        value: '-', 
         target: '',
         route: '',
         city: '',
@@ -50,22 +50,15 @@ const useFormFlights = () => {
         setStateForm(state => ( {...state, [id]: value, id, target, value} ));
     };
 
-    
-    const dalayCheckData = delay(checkData, 1500);
-
-
-    useEffect(() => {
-        dalayCheckData();
-    }, [stateForm]);
-
-    function checkData() {
-        console.log('checkData');
+    /** Функция вылидации формы
+    * @return {void}
+    */
+    const checkData = () => {
         //* если значение пустае удаляем все доп.класы
         if(stateForm.value === '') {
             deleteAddedClasses();
             return;
         }
-
         //* проверка свободных мест
         if(stateForm.id === 'freePlace') {
             const sit = Number(stateForm.freePlace);
@@ -77,17 +70,14 @@ const useFormFlights = () => {
                 stateForm.target.classList.add('is-invalid');
             }
         }
-
-        //* если id есть в исключениях, просто добавляем данные в state и добавляем класс успешной проверки
+        //* если id есть в исключениях, просто добавляем класс
         const exception = ['city', 'company', 'note'];
         if(exception.includes(stateForm.id)) {
             stateForm.target.classList.add('is-valid');
             return;
         }
-
         //* проверка уникальности введенного значения
         if(stateForm.id === 'route') {
-            console.log(stateForm.value);
             httpSQL
                 .post('/check-form-flights', {field: stateForm.id, value: stateForm.value})
                 .then(res => {
@@ -106,7 +96,6 @@ const useFormFlights = () => {
         
         //* проверка разрешон ли вылет в данное время, не более 2-х в одно итоже время и дату
         if(stateForm.id === 'dateRoute' || stateForm.id === 'timeRoute') {
-            
             if(stateForm.dateRoute && stateForm.timeRoute) {
                 // формируем дату в формате 2023-12-12T09:00:00
                 // данные в state {"timeRoute": "22:59","dateRoute": "2023-11-08"}
@@ -126,12 +115,15 @@ const useFormFlights = () => {
                     .catch(error => console.error(error));
             }
         }
-
+        //* проверка времени на соответствие условий 
         if(stateForm.id === 'dateRegistration' || stateForm.id === 'timeRegistration') {
             checkTime();
         }
-    }
+    };
 
+    /** Проверка разницы времени вылета и регистрации 
+    * @return {void} Изменит класс времени
+    */
     function checkTime() {
         //* проверка разницы времени вылета и регистрации, если есть все необходимые данные
         if(stateForm.dateRoute && stateForm.timeRoute && stateForm.dateRegistration && stateForm.timeRegistration) {
@@ -147,6 +139,10 @@ const useFormFlights = () => {
             }
         }
     }
+
+    useEffect(() => {
+        delayFnc(checkData, 500);
+    }, [stateForm]); // eslint-disable-line
 
     return {
         stateForm,

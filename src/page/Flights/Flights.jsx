@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import '../Booking/bookingPage.scss';
+import '../Booking/booking.scss';
 
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -14,10 +14,10 @@ import useGetAllFlights from '../../hooks/useGetAllFlights';
 * - редактирование рейсов
 * @component
 * @example
-* <FlightsPage/>
+* <Flights/>
 */
-//-- FlightsPage 
-const FlightsPage = () => {
+//-- Flights 
+const Flights = () => {
 
     const navigate = useNavigate();
     const {updateAllFlights, curentDataFlights} = useGetAllFlights();
@@ -128,11 +128,10 @@ const FlightsPage = () => {
                         </div>
                     </div>
                 </div>
-
             </div>
         </>
     );
 };
 
-export default FlightsPage;
+export default Flights;
 

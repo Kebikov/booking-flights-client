@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.css';
+// eslint-disable-line
 
 # Getting Started with Create React App
 

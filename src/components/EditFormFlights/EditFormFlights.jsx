@@ -1,32 +1,34 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import './popUpFormFlights.scss';
-
+import '../FormFlights/formFlights.scss';
+import * as Types from '../../types.js'; // eslint-disable-line 
+import convertObjFlightsDataToStateForm from '../../helpers/convertObjFlightsDataToStateForm.js';
+import convertObjStateFormToFlightsData from '../../helpers/convertObjStateFormToFlightsData.js';
 import { useNavigate } from 'react-router-dom';
 import { httpSQL } from '../../service/http.service.js';
-
-import delayFnc from '../../helpers/delay.js';
 import useFormFlights from '../../hooks/useFormFlights.js';
+import useGetAllFlights from '../../hooks/useGetAllFlights.js';
+import { useEffect } from 'react';
 
-/** COMPONENT > Форма для добавления рейса в БД
+/** COMPONENT > Форма для редактирования рейса в БД
 * @component
 * @example
-* <PopUpFormFlights/> 
+* <EditFormFlights id={...} />
+* @param {number} id - id рейса 
 */
-
-//= PopUpFormFlights 
-const PopUpFormFlights = () => {
-
-    /** Результат использования функции useFormFlights.
-    * @typedef {Object} FormFlightsData
-    * @property {string} stateForm - Состояние для хранения всех данных формы.
-    * @property {function} changeInput - Функция отслежеваюшая изминения состояния input.
-    * @property {string} stateClassInputDate - Состояние хранения класа для полей даты вылета.
-    * @property {string} stateClassDateRegistration - Состояние хранения класа для полей даты регистрации.
-    */
-    /** @type {FormFlightsData} */ 
-    const {stateForm, changeInput, stateClassInputDate, stateClassDateRegistration} = useFormFlights();
+//= EditFormFlights 
+const EditFormFlights = ({id}) => {
 
     const navigate = useNavigate();
+
+    /** Результат использования функции useFormFlights.
+     * @type {Types.UseFormFlights} */ 
+    const {stateForm, setStateForm, changeInput, stateClassInputDate, stateClassDateRegistration} = useFormFlights();
+    
+    /** Результат использования функции useFormFlights.
+    * @property {Types.FlightsData[]} curentDataFlights - Массив со всеми рейсами.
+    * @property {function} updateAllFlights - Функция обновления данных о рейсах.
+    */
+    const {curentDataFlights, updateAllFlights} = useGetAllFlights();
 
     const submitFormFlights = (event) => { 
         event.preventDefault();
@@ -34,28 +36,33 @@ const PopUpFormFlights = () => {
         const isInvalidElements = form.querySelectorAll('.is-invalid');
 
         if(isInvalidElements?.length === 0) {
-            const bodyForm = {
-                route: stateForm.route,
-                city: stateForm.city,
-                date: `${stateForm.dateRoute}T${stateForm.timeRoute}:00`, 
-                company: stateForm.company,
-                checkIn: `${stateForm.dateRegistration}T${stateForm.timeRegistration}:00`,
-                freePlace: Number (stateForm.freePlace),
-                note: stateForm?.note ?? '' 
-            };
+            const body = convertObjStateFormToFlightsData(stateForm);
+            body.id = id;
             httpSQL
-                .post('/form-flights', bodyForm)
-                .then(res => {
+                .patch('/patch-flights', body)
+                .then(() => {
                     form.reset();
                     navigate(-1);
                 })
                 .catch(error => console.error(error));
-        } else {
-            console.log('нет');
         }
     };
+    
+    useEffect(() => {
+        if(Array.isArray(curentDataFlights) && curentDataFlights.length > 0) {
+            /** editFlights - обьект с данными рейса
+            * @type {Types.FlightsData} */
+            const editFlights = curentDataFlights.find(flights => flights.id === id);
+            const state = convertObjFlightsDataToStateForm(editFlights);
+            setStateForm(state);
+        }
+    },[curentDataFlights]); // eslint-disable-line
 
-    const changeInputDelay = (event) => delayFnc(changeInput(event), 500);
+    useEffect(() => {
+        if(curentDataFlights.length === 0) {
+            updateAllFlights();
+        }
+    },[]); // eslint-disable-line
 
     return(
         <div className="popup-form-flights">
@@ -66,49 +73,33 @@ const PopUpFormFlights = () => {
                         <label htmlFor="route" className="form-label">Рейс</label>
                         <input 
                             id="route" 
-                            onChange={changeInputDelay}
-                            type="text" 
+                            type="text"
                             className="form-control" 
-                            maxLength="16" 
-                            placeholder="max 16 символов"
-                            autoComplete="off"
-                            required
+                            //onChange={changeInput}
+                            value={stateForm.route}
+                            readOnly
                         />
-                        <div className="valid-feedback">
-                            ok!
-                        </div>
-                        <div id="route" className="invalid-feedback">
-                            Введите уникальное имя рейса.
-                        </div>
                     </div>
                     {/*//* город */}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
                         <label htmlFor="city" className="form-label">Город</label>
                         <input 
                             id="city" 
-                            onChange={changeInputDelay}
                             type="text" 
                             className="form-control"
-                            maxLength="32"
-                            placeholder="max 32 символа"
-                            autoComplete="off"
-                            required
+                            value={stateForm.city}
+                            readOnly
                         />
-                        <div className="valid-feedback">
-                            ok!
-                        </div>
-                        <div id="city" className="invalid-feedback">
-                            Error
-                        </div>
                     </div>
                     {/*//* дата */}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
                         <label htmlFor="dateRoute" className="form-label">Дата рейса</label>
                         <input 
                             id="dateRoute" 
-                            onChange={changeInputDelay}
+                            onChange={changeInput}
                             type="date" 
                             className={stateClassInputDate}
+                            value={stateForm.dateRoute}
                             autoComplete="off"
                             required
                         />
@@ -124,9 +115,10 @@ const PopUpFormFlights = () => {
                         <label htmlFor="timeRoute" className="form-label">Время рейса</label>
                         <input 
                             id="timeRoute"
-                            onChange={changeInputDelay}
+                            onChange={changeInput}
                             type="time" 
                             className={stateClassInputDate}
+                            value={stateForm.timeRoute}
                             required
                         />
                         <div className="valid-feedback">
@@ -141,47 +133,32 @@ const PopUpFormFlights = () => {
                         <label htmlFor="company" className="form-label">Авиакомпания</label>
                         <input 
                             id="company"
-                            onChange={changeInputDelay} 
                             type="text"
                             className="form-control"
-                            maxLength="32"
-                            placeholder="max 32 символа"
-                            autoComplete="off"
-                            required
+                            value={stateForm.company}
+                            readOnly
                         />
-                        <div className="valid-feedback">
-                            ok!
-                        </div>
-                        <div id="company" className="invalid-feedback">
-                            Error
-                        </div>
                     </div>
                     {/*//* Количество свободных мест */}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
                         <label htmlFor="freePlace" className="form-label">Количество свободных мест</label>
                         <input 
                             id="freePlace"
-                            onChange={changeInputDelay} 
                             type="text"
                             className="form-control"
-                            placeholder="max 99 мест"
-                            required
+                            value={stateForm.freePlace}
+                            readOnly
                         />
-                        <div className="valid-feedback">
-                            ok!
-                        </div>
-                        <div id="freePlace" className="invalid-feedback">
-                            max 99 мест в самолете
-                        </div>
                     </div>
                     {/*//* дата регистрации*/}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
                         <label htmlFor="dateRegistration" className="form-label">Дата регистрации</label>
                         <input 
-                            id="dateRegistration" 
-                            onChange={changeInputDelay}
-                            type="date" 
+                            id="dateRegistration"
+                            onChange={changeInput}
+                            type="date"
                             className={stateClassDateRegistration}
+                            value={stateForm.dateRegistration}
                             required
                         />
                         <div className="valid-feedback">
@@ -196,9 +173,10 @@ const PopUpFormFlights = () => {
                         <label htmlFor="timeRegistration" className="form-label">Время рейса</label>
                         <input 
                             id="timeRegistration" 
-                            onChange={changeInputDelay}
+                            onChange={changeInput}
                             type="time" 
                             className={stateClassDateRegistration}
+                            value={stateForm.timeRegistration}
                             required
                         />
                         <div className="valid-feedback">
@@ -213,28 +191,29 @@ const PopUpFormFlights = () => {
                         <label htmlFor="note" className="form-label">Примечание</label>
                         <input 
                             id="note"
-                            onChange={changeInputDelay}
                             type="text" 
                             className="form-control"
-                            maxLength="64"
-                            placeholder="max 64 символа"
-                            autoComplete="off"
+                            value={stateForm.note}
+                            readOnly
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary mt-4">отправить</button>
+                    
+                    <button 
+                        type="submit" 
+                        className="btn btn-primary mt-4"
+                    >отправить
+                    </button>
                     <button 
                         type="submit" 
                         className="btn btn-secondary mt-4" 
                         style={{marginLeft: '20px'}} 
                         onClick={() => navigate(-1)}
-                    >
-                        отмена
+                    >отмена
                     </button>
                 </form>
-                
             </div>
         </div>
     );
 };
 
-export default PopUpFormFlights;
+export default EditFormFlights;

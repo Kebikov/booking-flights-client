@@ -1,8 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import './bookingPage.scss';
+import './booking.scss';
 import { useState, useEffect } from 'react';
 import convertFormatData from '../../helpers/convertFormatData';
 import { httpSQL } from '../../service/http.service';
+import { useNavigate } from 'react-router-dom';
 
 
 /**
@@ -10,8 +11,9 @@ import { httpSQL } from '../../service/http.service';
 * - данными забронированных рейсов клиентами
 * @component
 */
-const BookingPage = () => {
+const Booking = () => {
 
+    const navigate = useNavigate();
     /**
     * @typedef {Object} BookingData
     * @property {string} route - id рейса
@@ -29,6 +31,7 @@ const BookingPage = () => {
     */
     const [dataBooking, setDataBooking] = useState([]);
 
+    /** Строки с информацией о бронировании. *  @type {Element[]} */
     const infoBooking = dataBooking.map((order, i) => {
         return(
             <tr key={i} >
@@ -94,8 +97,38 @@ const BookingPage = () => {
                     {infoBooking}
                 </tbody>
             </table>
+            <div className="table-control">
+                <div className="table-control__body">
+                    <div className="btn-group" role="group" aria-label="Basic outlined example">
+                        <button 
+                            type="button" 
+                            className="btn btn-outline-primary"
+                            onClick={() => navigate('/add-booking')}
+                        >
+                            add
+                        </button>
+                        <button 
+                            type="button" 
+                            className="btn btn-outline-primary"
+                            // onClick={
+                            //     choiceFlights ?
+                            //         () => navigate(`/edit-flights/${choiceFlights}`)
+                            //         :
+                            //         null
+                            // }
+                        >
+                            edit
+                        </button>
+                        <button type="button" className="btn btn-outline-primary" 
+                        //</div>onClick={deleteElement}
+                        >
+                            del
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
 
-export default BookingPage;
+export default Booking;

@@ -4,35 +4,27 @@ import React, { useState, useEffect } from 'react';
 import { httpAdmin } from '../../service/http.service';
 
 
-/**
- * Component для отображения текущей даты и времени.
- * - получает начальное время c server
- * @component
- * @example
- * Пример использования компонента <Clock />:
- * <Clock />
- */
+/** Component для отображения текущей даты и времени.
+* - получает начальное время c server
+* @component
+* @example
+* Пример использования компонента <Clock />:
+* <Clock /> */
+//= Clock 
 const Clock = () => {
-    /**
-     * State текушего времени в формате number 
-     * - переменнная вида new Date().getTime()
-     * @typedef {number} curentDate
-     */
+    /** State текушего времени в формате number 
+    * - переменнная вида new Date().getTime()
+    * @typedef {number} curentDate
+    */
     const [curentDate, setCurentDate] = useState(0);
-    /**
-     * отображаемая дата на экране
-     * @type {string}
-     */
+
+    /** Отображаемая дата на экране. * @type {string} */
     let dateView = '';
-    /**
-     * отображаемое время на экране
-     * @type {string}
-     */
+
+    /** Отображаемое время на экране * @type {string} */
     let timeView = '';
-    /**
-     * переменная хранения таймера
-     * @type {object}
-     */
+
+    /** Переменная хранения таймера * @type {object} */
     let timer;
 
     if(curentDate) {
@@ -44,12 +36,11 @@ const Clock = () => {
         timeView = `${hours.padStart(2,'0')}:${minutes.padStart(2,'0')}`;
     }
     
-    /**
-     * Функция изминения времени
-     * - каждую секунду устанавливаем новое значение time
-     * - если минуты изминились меняем состояние передав новое значение времени в setCurentDate
-     * @param {number} data время в виде числа в мс., которое получаем в new Date().getTime()
-     */
+    /** Функция изминения времени
+    * - каждую секунду устанавливаем новое значение time
+    * - если минуты изминились меняем состояние передав новое значение времени в setCurentDate
+    * @param {number} data время в виде числа в мс., которое получаем в new Date().getTime()
+    */
     const goTime = (data) => {
         try {
             
@@ -58,11 +49,11 @@ const Clock = () => {
             timer = setTimeout(() => {
                 const minute = time.getMinutes();
                 time.setSeconds(time.getSeconds() + 1);
-                /**
-                 * @type {number}
-                 */
-                const newTime = time.getTime();
-                if(minute !== time.getMinutes()) setCurentDate(newTime);
+
+                if(minute !== time.getMinutes()) {
+                    const newTime = time.getTime();
+                    setCurentDate(newTime);
+                }
                 goTime( time.getTime() );
             }, 1000);
         } catch(error) {
