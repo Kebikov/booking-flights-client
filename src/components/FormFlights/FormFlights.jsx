@@ -2,19 +2,29 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './formFlights.scss';
 import { useNavigate } from 'react-router-dom';
 import { httpSQL } from '../../service/http.service.js';
-import delayFnc from '../../helpers/delay.js';
 import useFormFlights from '../../hooks/useFormFlights.js';
 import * as Types from '../../types.js'; // eslint-disable-line
+import changeInput from '../../helpers/changeInput.js';
 
-/** COMPONENT > Форма для добавления рейса в БД
+/** COMPONENT > Форма для добавления рейса в БД.
 * @component
 * @example
 * <FormFlights/> */
 //= FormFlights 
 const FormFlights = () => {
 
-    /** Hook useFormFlights. * @type {Types.UseFormFlights} */ 
-    const {stateForm, changeInput, stateClassInputDate, stateClassDateRegistration} = useFormFlights();
+    /** 
+     * Hook useFormFlights return. 
+     * @type {Types.UseFormFlights} 
+     */ 
+    const {
+        stateForm, 
+        setStateForm, 
+        stateClassInputDate, 
+        stateClassDateRegistration,
+        isPermitSubmitForm,
+        setIsPermitSubmitForm
+    } = useFormFlights();
 
     const navigate = useNavigate();
 
@@ -25,7 +35,7 @@ const FormFlights = () => {
 
         if(isInvalidElements?.length === 0) {
             const bodyForm = {
-                route: stateForm.route,
+                route: stateForm.route.toUpperCase(),
                 city: stateForm.city,
                 date: `${stateForm.dateRoute}T${stateForm.timeRoute}:00`, 
                 company: stateForm.company,
@@ -44,7 +54,10 @@ const FormFlights = () => {
         }
     };
 
-    const changeInputDelay = (event) => delayFnc(changeInput(event), 500);
+    /** Function отбрабатываюшая измининия состояния полей.
+    * @property {Event} event - Событие, которое вызвало изменение.
+    */
+    const change = (event) => changeInput(event, setStateForm, setIsPermitSubmitForm);
 
     return(
         <div className="popup-form-flights">
@@ -55,7 +68,7 @@ const FormFlights = () => {
                         <label htmlFor="route" className="form-label">Рейс</label>
                         <input 
                             id="route" 
-                            onChange={changeInputDelay}
+                            onChange={change}
                             type="text" 
                             className="form-control" 
                             maxLength="16" 
@@ -75,7 +88,7 @@ const FormFlights = () => {
                         <label htmlFor="city" className="form-label">Город</label>
                         <input 
                             id="city" 
-                            onChange={changeInputDelay}
+                            onChange={change}
                             type="text" 
                             className="form-control"
                             maxLength="32"
@@ -87,7 +100,7 @@ const FormFlights = () => {
                             ok!
                         </div>
                         <div id="city" className="invalid-feedback">
-                            Error
+                            Разрешены только буквы.
                         </div>
                     </div>
                     {/*//* дата */}
@@ -95,7 +108,7 @@ const FormFlights = () => {
                         <label htmlFor="dateRoute" className="form-label">Дата рейса</label>
                         <input 
                             id="dateRoute" 
-                            onChange={changeInputDelay}
+                            onChange={change}
                             type="date" 
                             className={stateClassInputDate}
                             autoComplete="off"
@@ -113,7 +126,7 @@ const FormFlights = () => {
                         <label htmlFor="timeRoute" className="form-label">Время рейса</label>
                         <input 
                             id="timeRoute"
-                            onChange={changeInputDelay}
+                            onChange={change}
                             type="time" 
                             className={stateClassInputDate}
                             required
@@ -130,7 +143,7 @@ const FormFlights = () => {
                         <label htmlFor="company" className="form-label">Авиакомпания</label>
                         <input 
                             id="company"
-                            onChange={changeInputDelay} 
+                            onChange={change} 
                             type="text"
                             className="form-control"
                             maxLength="32"
@@ -142,7 +155,7 @@ const FormFlights = () => {
                             ok!
                         </div>
                         <div id="company" className="invalid-feedback">
-                            Error
+                            Разрешены только буквы.
                         </div>
                     </div>
                     {/*//* Количество свободных мест */}
@@ -150,7 +163,7 @@ const FormFlights = () => {
                         <label htmlFor="freePlace" className="form-label">Количество свободных мест</label>
                         <input 
                             id="freePlace"
-                            onChange={changeInputDelay} 
+                            onChange={change} 
                             type="text"
                             className="form-control"
                             placeholder="max 99 мест"
@@ -160,7 +173,7 @@ const FormFlights = () => {
                             ok!
                         </div>
                         <div id="freePlace" className="invalid-feedback">
-                            max 99 мест в самолете
+                            Max 99 мест в самолете, разрешены только цыфры.
                         </div>
                     </div>
                     {/*//* дата регистрации*/}
@@ -168,7 +181,7 @@ const FormFlights = () => {
                         <label htmlFor="dateRegistration" className="form-label">Дата регистрации</label>
                         <input 
                             id="dateRegistration" 
-                            onChange={changeInputDelay}
+                            onChange={change}
                             type="date" 
                             className={stateClassDateRegistration}
                             required
@@ -182,10 +195,10 @@ const FormFlights = () => {
                     </div>
                     {/*//* время регистрации*/}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="timeRegistration" className="form-label">Время рейса</label>
+                        <label htmlFor="timeRegistration" className="form-label">Время регистрации</label>
                         <input 
                             id="timeRegistration" 
-                            onChange={changeInputDelay}
+                            onChange={change}
                             type="time" 
                             className={stateClassDateRegistration}
                             required
@@ -202,7 +215,7 @@ const FormFlights = () => {
                         <label htmlFor="note" className="form-label">Примечание</label>
                         <input 
                             id="note"
-                            onChange={changeInputDelay}
+                            onChange={change}
                             type="text" 
                             className="form-control"
                             maxLength="64"
@@ -210,7 +223,18 @@ const FormFlights = () => {
                             autoComplete="off"
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary mt-4">отправить</button>
+                    <button 
+                        type="submit" 
+                        className="btn btn-primary mt-4"
+                        style={
+                            isPermitSubmitForm ?
+                                null
+                                :
+                                {pointerEvents: 'none'}
+                        }
+                    >
+                        {isPermitSubmitForm ? 'отправить' : 'проверка...'}
+                    </button>
                     <button 
                         type="submit" 
                         className="btn btn-secondary mt-4" 

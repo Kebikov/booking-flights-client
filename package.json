@@ -18,7 +18,8 @@
         "react-scripts": "5.0.1",
         "redux": "^4.2.1",
         "sass": "^1.69.5",
-        "web-vitals": "^2.1.4"
+        "web-vitals": "^2.1.4",
+        "@babel/plugin-proposal-private-property-in-object": "^7.16.7"
     },
     "scripts": {
         "start": "react-scripts start",

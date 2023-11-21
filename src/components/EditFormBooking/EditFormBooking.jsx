@@ -1,24 +1,25 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../FormFlights/formFlights.scss';
 import { useNavigate } from 'react-router-dom';
-import { httpSQL } from '../../service/http.service.js';
 import useFormBooking from '../../hooks/useFormBooking.js';
-import * as Types from '../../types.js'; // eslint-disable-line
+import useGetAllBooking from '../../hooks/useGetAllBooking.js';
 import changeInput from '../../helpers/changeInput.js';
-import useGetAllFlights from '../../hooks/useGetAllFlights.js';
+import { useEffect } from 'react';
+import convertObjBookingDataToStateForm from '../../helpers/convertObjBookingDataToStateForm.js';
+import * as Types from '../../types.js'; // eslint-disable-line 
+import { httpSQL } from '../../service/http.service.js';
 
 /** 
- * COMPONENT > Форма для добавления рейса в БД
+ * COMPONENT > Форма для редактирования брони в БД.
  * @component
  * @example
- * <FormBooking/> 
+ * <EditFormBooking id={...} />
+ * @param {number} id - Id рейса.
  */
-//= FormBooking 
-const FormBooking = () => {
-
+//= EditFormBooking 
+const EditFormBooking = ({id}) => {
     const navigate = useNavigate();
 
-    const {updateAllFlights} = useGetAllFlights();
     /** 
      * Hook useFormBooking return.
      * @type {Types.UseFormBooking}
@@ -29,73 +30,75 @@ const FormBooking = () => {
         isPermitSubmitForm,
         setIsPermitSubmitForm
     } = useFormBooking();
-    
-    //* отправка формы
-    const submitFormBooking = (event) => { 
+    console.log(stateForm);
+    /** 
+     * Hook useGetAllBooking return:
+     * @typedef {Object} UseGetAllBooking
+     * @property {Types.BookingData[]} curentDataBooking - Массив со всеми бронями.
+     * @property {Function} updateAllBooking - Функция обновления данных о брони.
+     * @type {UseGetAllBooking}
+     */
+    const {curentDataBooking, updateAllBooking} = useGetAllBooking();
+
+    const submitFormBooking = (event) => {
         event.preventDefault();
         const form = event.target;
         const isInvalidElements = form.querySelectorAll('.is-invalid');
 
         if(isInvalidElements?.length === 0) {
-            const bodyForm = {
-                route: stateForm.route.toUpperCase(),
+            /**
+             * @type {Types.BookingUpdateData}
+             */
+            const body = {
                 surname: stateForm.surname,
-                name: stateForm.name, 
-                middleName: stateForm.middleName,
-                note: stateForm?.note ?? '' 
+                name: stateForm.name,
+                middleName: stateForm.middleName
             };
-
+            body.id = id;
             httpSQL
-                .post('/form-booking', bodyForm)
-                .then((res) => {
-                    if(res.data?.msg === 'FREE_PLACE_ZERO') {
-                        alert('Нет свободных мест на самолете.');
-                        return;
-                    }
-                    updateAllFlights();
+                .patch('/patch-booking', body)
+                .then(() => {
+                    updateAllBooking();
                     form.reset();
                     navigate(-1);
                 })
                 .catch(error => console.error(error));
         }
     };
-
     /** Function отбрабатываюшая измининия состояния полей.
      * @property {Event} event - Событие, которое вызвало изменение.
      */
     const change = (event) => changeInput(event, setStateForm, setIsPermitSubmitForm);
 
+    useEffect(() => {
+        if(Array.isArray(curentDataBooking) && curentDataBooking.length > 0) {
+            /** 
+             * editFlights - обьект с данными бронирования
+             * @type {Types.FormBooking} 
+             */
+            const editBooking = curentDataBooking.find(booking => booking.id === id);
+            const state = convertObjBookingDataToStateForm(editBooking);
+            setStateForm(state);
+        }
+    },[curentDataBooking]); // eslint-disable-line
+
+    useEffect(() => {
+        if(curentDataBooking.length === 0) {
+            updateAllBooking();
+        }
+    },[]); // eslint-disable-line
+
     return(
         <div className="popup-form-flights">
             <div className="popup-form-flights__body">
                 <form className="form-floating" onSubmit={submitFormBooking} >
-                    {/*//* рейс */}
-                    <div className="col-md-4 popup-form-flights__col">
-                        <label htmlFor="route" className="form-label">Рейс</label>
-                        <input 
-                            id="route" 
-                            value={stateForm.route}
-                            onChange={change}
-                            type="text" 
-                            className="form-control" 
-                            maxLength="16" 
-                            placeholder="max 16 символов"
-                            autoComplete="off"
-                            required
-                        />
-                        <div className="valid-feedback">
-                            ok!
-                        </div>
-                        <div id="route" className="invalid-feedback">
-                            Нет такого рейса.
-                        </div>
-                    </div>
                     {/*//* Фамилия */}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
                         <label htmlFor="surname" className="form-label">Фамилия</label>
                         <input 
                             id="surname" 
                             onChange={change}
+                            value={stateForm.surname}
                             type="text" 
                             className="form-control"
                             maxLength="32"
@@ -116,6 +119,7 @@ const FormBooking = () => {
                         <input 
                             id="name" 
                             onChange={change}
+                            value={stateForm.name}
                             type="text" 
                             className="form-control"
                             maxLength="32"
@@ -136,6 +140,7 @@ const FormBooking = () => {
                         <input 
                             id="middleName"
                             onChange={change} 
+                            value={stateForm.middleName}
                             type="text"
                             className="form-control"
                             maxLength="32"
@@ -149,19 +154,6 @@ const FormBooking = () => {
                         <div id="middleName" className="invalid-feedback">
                             В отчестве далжны быть только буквы.
                         </div>
-                    </div>
-                    {/*//* Примечание */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="note" className="form-label">Примечание</label>
-                        <input 
-                            id="note"
-                            onChange={change}
-                            type="text" 
-                            className="form-control"
-                            maxLength="64"
-                            placeholder="max 64 символа"
-                            autoComplete="off"
-                        />
                     </div>
                     <button 
                         type="submit" 
@@ -184,10 +176,9 @@ const FormBooking = () => {
                         отмена
                     </button>
                 </form>
-                
             </div>
         </div>
     );
 };
 
-export default FormBooking;
+export default EditFormBooking;

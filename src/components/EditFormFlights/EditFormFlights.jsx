@@ -8,28 +8,42 @@ import { httpSQL } from '../../service/http.service.js';
 import useFormFlights from '../../hooks/useFormFlights.js';
 import useGetAllFlights from '../../hooks/useGetAllFlights.js';
 import { useEffect } from 'react';
+import changeInput from '../../helpers/changeInput.js';
 
-/** COMPONENT > Форма для редактирования рейса в БД
-* @component
-* @example
-* <EditFormFlights id={...} />
-* @param {number} id - id рейса 
-*/
+/** 
+ * COMPONENT > Форма для редактирования рейса в БД
+ * @component
+ * @example
+ * <EditFormFlights id={...} />
+ * @param {number} id - id рейса 
+ */
 //= EditFormFlights 
 const EditFormFlights = ({id}) => {
 
     const navigate = useNavigate();
-
-    /** Результат использования функции useFormFlights.
-     * @type {Types.UseFormFlights} */ 
-    const {stateForm, setStateForm, changeInput, stateClassInputDate, stateClassDateRegistration} = useFormFlights();
-    
-    /** Результат использования функции useFormFlights.
-    * @property {Types.FlightsData[]} curentDataFlights - Массив со всеми рейсами.
-    * @property {function} updateAllFlights - Функция обновления данных о рейсах.
-    */
+    /** 
+     * Результат использования функции useFormFlights.
+     * @type {Types.UseFormFlights} 
+     */ 
+    const {
+        stateForm, 
+        setStateForm, 
+        stateClassInputDate, 
+        stateClassDateRegistration,
+        isPermitSubmitForm,
+        setIsPermitSubmitForm
+    } = useFormFlights();
+    /** 
+     * Результат использования функции useFormFlights.
+     * @property {Types.FlightsData[]} curentDataFlights - Массив со всеми рейсами.
+     * @property {function} updateAllFlights - Функция обновления данных о рейсах.
+     */
     const {curentDataFlights, updateAllFlights} = useGetAllFlights();
 
+    /**
+     * Отправка данных на сервер при submit
+     * @param {Event} event 
+     */
     const submitFormFlights = (event) => { 
         event.preventDefault();
         const form = event.target;
@@ -41,12 +55,15 @@ const EditFormFlights = ({id}) => {
             httpSQL
                 .patch('/patch-flights', body)
                 .then(() => {
+                    updateAllFlights();
                     form.reset();
                     navigate(-1);
                 })
                 .catch(error => console.error(error));
         }
     };
+
+    const change = (event) => changeInput(event, setStateForm, setIsPermitSubmitForm);
     
     useEffect(() => {
         if(Array.isArray(curentDataFlights) && curentDataFlights.length > 0) {
@@ -64,39 +81,18 @@ const EditFormFlights = ({id}) => {
         }
     },[]); // eslint-disable-line
 
+    
+
     return(
         <div className="popup-form-flights">
             <div className="popup-form-flights__body">
                 <form className="form-floating" onSubmit={submitFormFlights} >
-                    {/*//* рейс */}
-                    <div className="col-md-4 popup-form-flights__col">
-                        <label htmlFor="route" className="form-label">Рейс</label>
-                        <input 
-                            id="route" 
-                            type="text"
-                            className="form-control" 
-                            //onChange={changeInput}
-                            value={stateForm.route}
-                            readOnly
-                        />
-                    </div>
-                    {/*//* город */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="city" className="form-label">Город</label>
-                        <input 
-                            id="city" 
-                            type="text" 
-                            className="form-control"
-                            value={stateForm.city}
-                            readOnly
-                        />
-                    </div>
                     {/*//* дата */}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
                         <label htmlFor="dateRoute" className="form-label">Дата рейса</label>
                         <input 
                             id="dateRoute" 
-                            onChange={changeInput}
+                            onChange={change}
                             type="date" 
                             className={stateClassInputDate}
                             value={stateForm.dateRoute}
@@ -115,7 +111,7 @@ const EditFormFlights = ({id}) => {
                         <label htmlFor="timeRoute" className="form-label">Время рейса</label>
                         <input 
                             id="timeRoute"
-                            onChange={changeInput}
+                            onChange={change}
                             type="time" 
                             className={stateClassInputDate}
                             value={stateForm.timeRoute}
@@ -128,34 +124,12 @@ const EditFormFlights = ({id}) => {
                             Выберите другую дату или время рейса.
                         </div>
                     </div>
-                    {/*//* Авиакомпания */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="company" className="form-label">Авиакомпания</label>
-                        <input 
-                            id="company"
-                            type="text"
-                            className="form-control"
-                            value={stateForm.company}
-                            readOnly
-                        />
-                    </div>
-                    {/*//* Количество свободных мест */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="freePlace" className="form-label">Количество свободных мест</label>
-                        <input 
-                            id="freePlace"
-                            type="text"
-                            className="form-control"
-                            value={stateForm.freePlace}
-                            readOnly
-                        />
-                    </div>
                     {/*//* дата регистрации*/}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
                         <label htmlFor="dateRegistration" className="form-label">Дата регистрации</label>
                         <input 
                             id="dateRegistration"
-                            onChange={changeInput}
+                            onChange={change}
                             type="date"
                             className={stateClassDateRegistration}
                             value={stateForm.dateRegistration}
@@ -170,10 +144,10 @@ const EditFormFlights = ({id}) => {
                     </div>
                     {/*//* время регистрации*/}
                     <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="timeRegistration" className="form-label">Время рейса</label>
+                        <label htmlFor="timeRegistration" className="form-label">Время регистрации</label>
                         <input 
                             id="timeRegistration" 
-                            onChange={changeInput}
+                            onChange={change}
                             type="time" 
                             className={stateClassDateRegistration}
                             value={stateForm.timeRegistration}
@@ -186,22 +160,18 @@ const EditFormFlights = ({id}) => {
                             Регистрация минимум за 30 минут до рейса.
                         </div>
                     </div>
-                    {/*//* Примечание */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
-                        <label htmlFor="note" className="form-label">Примечание</label>
-                        <input 
-                            id="note"
-                            type="text" 
-                            className="form-control"
-                            value={stateForm.note}
-                            readOnly
-                        />
-                    </div>
                     
                     <button 
                         type="submit" 
                         className="btn btn-primary mt-4"
-                    >отправить
+                        style={
+                            isPermitSubmitForm ?
+                                null
+                                :
+                                {pointerEvents: 'none'}
+                        }
+                    >
+                        {isPermitSubmitForm ? 'отправить' : 'проверка...'}
                     </button>
                     <button 
                         type="submit" 

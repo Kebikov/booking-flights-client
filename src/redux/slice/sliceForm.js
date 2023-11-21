@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    curentDataFlights: []
+    curentDataFlights: [],
+    curentDataBooking: []
 };
 
 const sliceForm = createSlice({
@@ -10,6 +11,9 @@ const sliceForm = createSlice({
     reducers: {
         setCurentDataFlights: (state, actions) => {
             state.curentDataFlights = actions.payload;
+        },
+        setCurentDataBooking: (state, actions) => {
+            state.curentDataBooking = actions.payload;
         }
     }
 });
@@ -19,5 +23,6 @@ const {reducer, actions} = sliceForm;
 export default reducer;
 
 export const {
-    setCurentDataFlights
+    setCurentDataFlights,
+    setCurentDataBooking
 } = actions;

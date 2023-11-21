@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../Booking/booking.scss';
 
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { httpSQL } from '../../service/http.service';
 import LineForTableFlights from '../../components/LineForTableFlights/LineForTableBooking';
 import HeaderForTableBooking from '../../components/HeaderForTableBooking/HeaderForTableBooking';
@@ -10,12 +10,12 @@ import useGetAllFlights from '../../hooks/useGetAllFlights';
 
 
 /**
-* Page > c данными рейсов :
-* - редактирование рейсов
-* @component
-* @example
-* <Flights/>
-*/
+ * Page > c данными рейсов :
+ * - редактирование рейсов
+ * @component
+ * @example
+ * <Flights/>
+ */
 //-- Flights 
 const Flights = () => {
 
@@ -23,9 +23,9 @@ const Flights = () => {
     const {updateAllFlights, curentDataFlights} = useGetAllFlights();
 
     /**
-    * choiceFlights - id выбранного обьекта для редактирования или удаления
-    * @type {[number, React.Dispatch<React.SetStateAction<number>>]}
-    */
+     * choiceFlights - Id выбранного обьекта для редактирования или удаления.
+     * @type {[number, function(number): void]}
+     */
     const [choiceFlights, setChoiceFlights] = useState(null);
 
     const editElement = (event) => {
@@ -61,10 +61,6 @@ const Flights = () => {
     const infoBooking = curentDataFlights.map((order, i) => 
         <LineForTableFlights order={order} edit={editElement} choice={choiceFlights} key={i} />
     );
-
-    useEffect(() => {
-        updateAllFlights();
-    },[]); // eslint-disable-line 
 
     return(
         <>
@@ -124,7 +120,13 @@ const Flights = () => {
                             >
                                 edit
                             </button>
-                            <button type="button" className="btn btn-outline-primary" onClick={deleteElement}>del</button>
+                            <button 
+                                type="button" 
+                                className="btn btn-outline-primary" 
+                                onClick={deleteElement}
+                            >
+                                del
+                            </button>
                         </div>
                     </div>
                 </div>

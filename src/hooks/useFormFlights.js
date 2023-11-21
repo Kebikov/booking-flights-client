@@ -2,36 +2,35 @@ import { useState, useEffect } from 'react';
 import { httpSQL } from '../service/http.service.js';
 import * as Types from '../types.js'; // eslint-disable-line 
 import delayFnc from '../helpers/delay.js';
+import isOnlyLetter from '../helpers/isOnlyLetter.js';
 
 const useFormFlights = () => {
-
-    /** Состояние для хранения всех данных формы
-    * @type {[Types.StateForm, function(Types.StateForm): void]}
-    */
+    /** 
+     * Состояние для хранения всех данных формы.
+     * @type {[Types.StateForm, function(Types.StateForm): void]}
+     */
     const [stateForm, setStateForm] = useState({
-        id: '',
-        value: '-', 
-        target: '',
-        route: '',
-        city: '',
-        dateRoute: '',
-        timeRoute: '',
-        freePlace: '',
-        company: '',
-        dateRegistration: '',
-        timeRegistration: '',
-        note: ''
+        id: '', value: '-', target: '', route: '', city: '', dateRoute: '', timeRoute: '', 
+        freePlace: '', company: '', dateRegistration: '', timeRegistration: '', note: ''
     });
-
-    /** Состояние хранения класа для полей даты вылета
-    * @typedef {'form-control' | 'form-control is-valid' | 'form-control is-invalid'} DateClass
-    * @type {[DateClass, function(DateClass): void]}
-    */
-    const [stateClassInputDate, setStateClassInputDate] = useState('form-control'); 
-
-    /** Состояние хранения класа для полей даты регистрации
-    * @type {[DateClass, function(DateClass): void]}
-    */
+    /** 
+     * Состояние хранения класа для полей даты вылета.
+     * @typedef {'form-control' | 'form-control is-valid' | 'form-control is-invalid'} InputClass
+     * @type {[DateClass, function(DateClass): void]}
+     */
+    const [stateClassInputDate, setStateClassInputDate] = useState('form-control');
+    /**
+     * @typedef {boolean} isPermitSubmitForm 
+     * State хранения доступности отправки данных формы.
+     * - True (отправка данных разрешена).
+     * - False (отправка запрешена данных).
+     */
+    const [isPermitSubmitForm, setIsPermitSubmitForm] = useState(true);
+    
+    /** 
+     * Состояние хранения класа для полей даты регистрации.
+     * @type {[InputClass, function(DateClass): void]}
+     */
     const [stateClassDateRegistration, setStateClassDateRegistration] = useState('form-control');
 
     const deleteAddedClasses = () => {
@@ -39,21 +38,13 @@ const useFormFlights = () => {
         stateForm.target.classList.remove('is-invalid');
     };
 
-    /** Функция отслежеваюшая изминения состояния input
-    * @param {Event} event обьект события
-    * @return {void}
-    */
-    const changeInput = (event) => {
-        const target = event.target;
-        const id = target.id;
-        const value = target.value;
-        setStateForm(state => ( {...state, [id]: value, id, target, value} ));
-    };
-
-    /** Функция вылидации формы
-    * @return {void}
-    */
+    /** 
+     * Функция вылидации формы.
+     * @return {void}
+     */
     const checkData = () => {
+        console.log('проверка');
+        setIsPermitSubmitForm(true);
         //* если значение пустае удаляем все доп.класы
         if(stateForm.value === '') {
             deleteAddedClasses();
@@ -70,10 +61,10 @@ const useFormFlights = () => {
                 stateForm.target.classList.add('is-invalid');
             }
         }
-        //* если id есть в исключениях, просто добавляем класс
-        const exception = ['city', 'company', 'note'];
+        //* проверка поля на наличие цыфр
+        const exception = ['city', 'company'];
         if(exception.includes(stateForm.id)) {
-            stateForm.target.classList.add('is-valid');
+            isOnlyLetter(stateForm, deleteAddedClasses);
             return;
         }
         //* проверка уникальности введенного значения
@@ -93,7 +84,11 @@ const useFormFlights = () => {
                 })
                 .catch(error => console.error(error));
         } 
-        
+        //* проверка наличия данных в поле note
+        if(stateForm.id === 'note') {
+            stateForm.target.classList.add('is-valid');
+            return;
+        }
         //* проверка разрешон ли вылет в данное время, не более 2-х в одно итоже время и дату
         if(stateForm.id === 'dateRoute' || stateForm.id === 'timeRoute') {
             if(stateForm.dateRoute && stateForm.timeRoute) {
@@ -121,9 +116,10 @@ const useFormFlights = () => {
         }
     };
 
-    /** Проверка разницы времени вылета и регистрации 
-    * @return {void} Изменит класс времени
-    */
+    /** 
+     * Проверка разницы времени вылета и регистрации.
+     * @return {void} Изменит класс времени.
+     */
     function checkTime() {
         //* проверка разницы времени вылета и регистрации, если есть все необходимые данные
         if(stateForm.dateRoute && stateForm.timeRoute && stateForm.dateRegistration && stateForm.timeRegistration) {
@@ -141,15 +137,16 @@ const useFormFlights = () => {
     }
 
     useEffect(() => {
-        delayFnc(checkData, 500);
+        if(stateForm.id) delayFnc(checkData, 1000);
     }, [stateForm]); // eslint-disable-line
 
     return {
         stateForm,
         setStateForm,
-        changeInput,
         stateClassInputDate,
-        stateClassDateRegistration
+        stateClassDateRegistration,
+        isPermitSubmitForm, 
+        setIsPermitSubmitForm
     };
 };
 

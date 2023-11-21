@@ -12,10 +12,11 @@ import { httpAdmin } from '../../service/http.service';
 * <Clock /> */
 //= Clock 
 const Clock = () => {
-    /** State текушего времени в формате number 
-    * - переменнная вида new Date().getTime()
-    * @typedef {number} curentDate
-    */
+    /** 
+     * State текушего времени в формате number 
+     * - переменнная вида new Date().getTime()
+     * @typedef {number} curentDate
+     */
     const [curentDate, setCurentDate] = useState(0);
 
     /** Отображаемая дата на экране. * @type {string} */
@@ -24,7 +25,7 @@ const Clock = () => {
     /** Отображаемое время на экране * @type {string} */
     let timeView = '';
 
-    /** Переменная хранения таймера * @type {object} */
+    /** Переменная хранения таймера * @type {Object} */
     let timer;
 
     if(curentDate) {
@@ -36,11 +37,12 @@ const Clock = () => {
         timeView = `${hours.padStart(2,'0')}:${minutes.padStart(2,'0')}`;
     }
     
-    /** Функция изминения времени
-    * - каждую секунду устанавливаем новое значение time
-    * - если минуты изминились меняем состояние передав новое значение времени в setCurentDate
-    * @param {number} data время в виде числа в мс., которое получаем в new Date().getTime()
-    */
+    /** 
+     * Функция изминения времени
+     * - каждую секунду устанавливаем новое значение time
+     * - если минуты изминились меняем состояние передав новое значение времени в setCurentDate
+     * @param {number} data время в виде числа в мс., которое получаем в new Date().getTime()
+     */
     const goTime = (data) => {
         try {
             
@@ -51,6 +53,7 @@ const Clock = () => {
                 time.setSeconds(time.getSeconds() + 1);
 
                 if(minute !== time.getMinutes()) {
+                    console.log(minute + 1);
                     const newTime = time.getTime();
                     setCurentDate(newTime);
                 }
@@ -66,8 +69,8 @@ const Clock = () => {
             .get('/curent-time')
             .then(res => {
                 /** 
-                 * Данные с server
-                 * - переменнная вида new Date().getTime()
+                 * Данные с server.
+                 * - Переменнная вида new Date().getTime().
                  * @type {number}
                 */
                 const data = res.data.time;

@@ -9,7 +9,11 @@ import Spiner from '../components/Spiner/Spiner';
 
 const AddFlights = lazy(() => import('../page/AddFlights/AddFlights'));
 const EditFlights = lazy(() => import('../page/EditFlights/EditFlights'));
+
 const AddBooking = lazy(() => import('../page/AddBooking/AddBooking'));
+const EditBooking = lazy(() => import('../page/EditBooking/EditBooking'));
+
+
 
 
 const App = () =>  {
@@ -27,6 +31,7 @@ const App = () =>  {
                             <Route path="/add-flights" element={<AddFlights/>}/>
                             <Route path="/edit-flights/:id" element={<EditFlights/>}/>
                             <Route path="/add-booking" element={<AddBooking/>}/>
+                            <Route path="/edit-booking/:id" element={<EditBooking/>}/>
                         </Routes>
                     </Suspense>
                 </main>
