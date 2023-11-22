@@ -1,4 +1,5 @@
 @import '../../scss/variables.scss';
+@import '../../scss/mixin.scss';
 
 .table-margin {
     margin-top: 20px;
@@ -11,4 +12,27 @@
 .table-input {
     border: 1px solid $color-header-title;
     width: 100%;
+}
+
+.table-control {
+    
+    &__body {
+
+        display: flex;
+        justify-content: space-between;
+    }
+    &__select {
+        flex: 0 1 20%;
+    }
+    &__btn-group {
+    }
+
+}
+
+.page-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 14px;
 }

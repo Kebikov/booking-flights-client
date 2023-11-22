@@ -9,11 +9,17 @@ import convertObjBookingDataToStateForm from '../../helpers/convertObjBookingDat
 import * as Types from '../../types.js'; // eslint-disable-line 
 import { httpSQL } from '../../service/http.service.js';
 
+/**
+ * @typedef {Object} PropseMy
+ * @property {number} id - Id рейса.
+ */
+
 /** 
  * COMPONENT > Форма для редактирования брони в БД.
  * @component
  * @example
  * <EditFormBooking id={...} />
+ * @param {PropseMy} 
  * @param {number} id - Id рейса.
  */
 //= EditFormBooking 
@@ -30,7 +36,7 @@ const EditFormBooking = ({id}) => {
         isPermitSubmitForm,
         setIsPermitSubmitForm
     } = useFormBooking();
-    console.log(stateForm);
+
     /** 
      * Hook useGetAllBooking return:
      * @typedef {Object} UseGetAllBooking
@@ -182,3 +188,7 @@ const EditFormBooking = ({id}) => {
 };
 
 export default EditFormBooking;
+
+
+
+

@@ -53,7 +53,6 @@ const Clock = () => {
                 time.setSeconds(time.getSeconds() + 1);
 
                 if(minute !== time.getMinutes()) {
-                    console.log(minute + 1);
                     const newTime = time.getTime();
                     setCurentDate(newTime);
                 }

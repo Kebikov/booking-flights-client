@@ -7,6 +7,7 @@ import { httpSQL } from '../../service/http.service';
 import LineForTableFlights from '../../components/LineForTableFlights/LineForTableBooking';
 import HeaderForTableBooking from '../../components/HeaderForTableBooking/HeaderForTableBooking';
 import useGetAllFlights from '../../hooks/useGetAllFlights';
+import * as Types from '../../types.js'; // eslint-disable-line
 
 
 /**
@@ -20,6 +21,10 @@ import useGetAllFlights from '../../hooks/useGetAllFlights';
 const Flights = () => {
 
     const navigate = useNavigate();
+    /**
+     * Hook useGetAllFlights return.
+     * @type {Types.UseGetAllFlights}
+     */
     const {updateAllFlights, curentDataFlights} = useGetAllFlights();
 
     /**

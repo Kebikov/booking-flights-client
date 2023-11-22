@@ -78,5 +78,25 @@
  * @property {string} middleName - Отчество пасажира.
  */
 
+/**
+ * Hook useGetAllBooking return.
+ * @typedef {Object} UseGetAllBooking
+ * @property {BookingData[]} curentDataBooking - Глобольный массив обьектов с данными бронирования.
+ * @property {Function} updateAllBooking - Function обновления глобального состояния с данными брони(curentDataBooking).
+ */
+
+/**
+ * Hook useGetAllFlights return.
+ * @typedef {Object} UseGetAllFlights
+ * @property {FlightsData[]} curentDataFlights - Глобольный массив обьектов с данными рейсов.
+ * @property {Function} updateAllFlights - Function обновления глобального состояния с данными рейсов(curentDataFlights).
+ */
+
+/**
+ * @typedef {Object} TotalAllPage
+ * @property {number} booking - Количество страниц в таблице booking.
+ * @property {number} flights - Количество страниц в таблице flights.
+ */
+
 
 export const Types = {};

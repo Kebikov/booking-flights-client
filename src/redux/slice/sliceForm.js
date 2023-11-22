@@ -1,8 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
+import * as Types from '../../types.js'; // eslint-disable-line
 
+
+/**
+ * @typedef {Object} InitialState
+ * @property {Types.FlightsData} curentDataFlights - Тукушее загруженые обьекты  рейсов.
+ * @property {Types.BookingData} curentDataBooking - Тукушее загруженые обьекты  брони.
+ * @property {Types.TotalAllPage} totalAllPageObj - Обьект с количеством страниц.
+ * @property {number} totalLineInPage - Установленое количество отображаемых записей.
+ * @property {number} currentPage - Номер текушей просматриваемой страницы.
+ */
+
+/**
+ * @type {InitialState}
+ */
 const initialState = {
     curentDataFlights: [],
-    curentDataBooking: []
+    curentDataBooking: [], 
+    totalAllPageObj: {
+        booking: 0,
+        flights: 0
+    },
+    totalLineInPage: 5,
+    currentPage: 1
 };
 
 const sliceForm = createSlice({
@@ -14,6 +34,15 @@ const sliceForm = createSlice({
         },
         setCurentDataBooking: (state, actions) => {
             state.curentDataBooking = actions.payload;
+        },
+        setTotalLineInPage: (state, actions) => {
+            state.totalLineInPage = actions.payload;
+        },
+        setCurrentPage: (state, actions) => {
+            state.currentPage = actions.payload;
+        },
+        setTotalAllPage: (state, actions) => {
+            state.totalAllPageObj = {...state.totalAllPageObj, ...actions.payload};
         }
     }
 });
@@ -24,5 +53,8 @@ export default reducer;
 
 export const {
     setCurentDataFlights,
-    setCurentDataBooking
+    setCurentDataBooking,
+    setTotalLineInPage,
+    setCurrentPage,
+    setTotalAllPage
 } = actions;

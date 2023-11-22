@@ -1,12 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './booking.scss';
+import '../../scss/public.scss';
 import { useState } from 'react';
 import { httpSQL } from '../../service/http.service';
-import { useNavigate } from 'react-router-dom';
 import * as Types from '../../types.js'; // eslint-disable-line
 import useGetAllBooking from '../../hooks/useGetAllBooking.js';
 import useGetAllFlights from '../../hooks/useGetAllFlights.js';
 import LineForTableBooking from '../../components/LineForTableBooking/LineForTableBooking.jsx';
+import TableControl from '../../components/TableControl/TableControl.jsx';
 
 
 /** 
@@ -16,22 +17,25 @@ import LineForTableBooking from '../../components/LineForTableBooking/LineForTab
  */
 const Booking = () => {
 
-    const navigate = useNavigate();
-
-    const {updateAllBooking, curentDataBooking} = useGetAllBooking();
-    const {updateAllFlights} = useGetAllFlights();
-
-    /** dataBooking - массив обьектов с данными бронирования
-     * @type {[Types.BookingData[], function(Types.BookingData[]): void]}
+    /**
+     * Hook useGetAllBooking return.
+     * @type {Types.UseGetAllBooking}
      */
+    const {updateAllBooking, curentDataBooking} = useGetAllBooking();
+
+    /**
+     * Hook useGetAllFlights return.
+     * @type {Types.UseGetAllFlights}
+     */
+    const {updateAllFlights} = useGetAllFlights();
 
     /**
      * choiceFlights - Id выбранного обьекта для редактирования или удаления.
      * @type {[number, function(number): void]}
      */
     const [choiceBooking, setChoiceBooking] = useState(null);
-    console.log(choiceBooking);
-    //* редактировани брони
+
+    //* Function удаление брони
     const deleteElement = () => {
         if(choiceBooking === null) {
             alert('Выберите бронь для удаления. Нажмите на номер рейса.');
@@ -116,38 +120,10 @@ const Booking = () => {
                     {infoBooking}
                 </tbody>
             </table>
-            <div className="table-control">
-                <div className="table-control__body">
-                    <div className="btn-group" role="group" aria-label="Basic outlined example">
-                        <button 
-                            type="button" 
-                            className="btn btn-outline-primary"
-                            onClick={() => navigate('/add-booking')}
-                        >
-                            add
-                        </button>
-                        <button 
-                            type="button" 
-                            className="btn btn-outline-primary"
-                            onClick={
-                                choiceBooking ?
-                                    () => navigate(`/edit-booking/${choiceBooking}`)
-                                    :
-                                    null
-                            }
-                        >
-                            edit
-                        </button>
-                        <button 
-                            type="button" 
-                            className="btn btn-outline-primary" 
-                            onClick={deleteElement}
-                        >
-                            del
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <TableControl 
+                choiceBooking={choiceBooking} 
+                deleteElement={deleteElement} 
+            />
         </div>
     );
 };
