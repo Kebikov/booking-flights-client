@@ -1,11 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurentDataFlights } from '../redux/slice/sliceForm.js';
+import { setCurentDataFlights, setTotalAllPage } from '../redux/slice/sliceForm.js';
 import { httpSQL } from '../service/http.service.js';
 import * as Types from '../types.js'; // eslint-disable-line
 
 
 const useGetAllFlights = () => {
     const dispatch = useDispatch();
+
+    /**
+     * @type {number} totalLineInPage 
+     * - Установленое количество отображаемых записей.
+     */
+    const totalLineInPage = useSelector(state => state.sliceForm.totalLineInPage);
+    /**
+     * @type {number} currentPage
+     * - Номер текушей просматриваемой страницы.
+     */
+    const currentPage = useSelector(state => state.sliceForm.currentPage); 
 
     /**
      * Глобольный массив обьектов с данными рейсов.
@@ -18,8 +29,11 @@ const useGetAllFlights = () => {
      */
     const updateAllFlights = () => {
         httpSQL
-            .get('/flights-data')
-            .then(res => dispatch( setCurentDataFlights(res.data) ) )
+            .get(`/flights-data?total=${totalLineInPage}&page=${currentPage}`)
+            .then(res => {
+                dispatch( setCurentDataFlights(res.data.dataFlights) );
+                dispatch( setTotalAllPage({flights: res.data.totalPagesBooking}) );
+            })
             .catch(error => console.error(error));
     };
     

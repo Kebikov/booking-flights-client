@@ -4,20 +4,20 @@ import convertFormatData from '../../helpers/convertFormatData';
  * COMPONENT > строки для таблицы полетов.
  * @component
  * @example
- * <LineForTableFlights order={...} edit={...} choice={...} />
- * @param {Object} order - обьек с данными.
- * @param {Function} edit - функция для выбора строки.
- * @param {number} choice - состояние с выбранной строкой.
+ * <LineForTableFlights order={...} choiceLine={...} selectedLine={...} />
+ * @param {Object} order - Обьек с данными.
+ * @param {Function} choiceLine - Функция для выбора строки.
+ * @param {number}  selectedLine - Состояние с выбранной строкой.
  */
 //= LineForTableBooking 
-const LineForTableFlights = ({order, edit, choice}) => {
+const LineForTableFlights = ({order, choiceLine,  selectedLine}) => {
 
     return(
         <tr key={order?.id} >
             <td 
                 id={order?.id} 
-                onClick={edit} 
-                className={order?.id === choice ? 'bg-secondary text-white' : ''}
+                onClick={choiceLine} 
+                className={order?.id ===  selectedLine ? 'bg-secondary text-white' : ''}
             >
                 {order?.route ? order.route : '-'}
             </td>

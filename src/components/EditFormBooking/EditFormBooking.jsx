@@ -1,16 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../FormFlights/formFlights.scss';
+import '../../types.js';
 import { useNavigate } from 'react-router-dom';
 import useFormBooking from '../../hooks/useFormBooking.js';
 import useGetAllBooking from '../../hooks/useGetAllBooking.js';
 import changeInput from '../../helpers/changeInput.js';
 import { useEffect } from 'react';
 import convertObjBookingDataToStateForm from '../../helpers/convertObjBookingDataToStateForm.js';
-import * as Types from '../../types.js'; // eslint-disable-line 
 import { httpSQL } from '../../service/http.service.js';
 
+
 /**
- * @typedef {Object} PropseMy
+ * @typedef {Object} Propse
  * @property {number} id - Id рейса.
  */
 
@@ -19,7 +20,7 @@ import { httpSQL } from '../../service/http.service.js';
  * @component
  * @example
  * <EditFormBooking id={...} />
- * @param {PropseMy} 
+ * @param {Propse} 
  * @param {number} id - Id рейса.
  */
 //= EditFormBooking 
@@ -28,23 +29,20 @@ const EditFormBooking = ({id}) => {
 
     /** 
      * Hook useFormBooking return.
-     * @type {Types.UseFormBooking}
+     * @type {UseFormBooking}
      */
-    const {
-        stateForm, 
-        setStateForm,
-        isPermitSubmitForm,
-        setIsPermitSubmitForm
-    } = useFormBooking();
+    const {stateForm, setStateForm, isPermitSubmitForm, setIsPermitSubmitForm} = useFormBooking();
 
     /** 
      * Hook useGetAllBooking return:
      * @typedef {Object} UseGetAllBooking
-     * @property {Types.BookingData[]} curentDataBooking - Массив со всеми бронями.
+     * @property {BookingData[]} curentDataBooking - Массив со всеми бронями.
      * @property {Function} updateAllBooking - Функция обновления данных о брони.
-     * @type {UseGetAllBooking}
      */
-    const {curentDataBooking, updateAllBooking} = useGetAllBooking();
+    /**
+     *  @type {UseGetAllBooking}
+     */
+    const {updateAllBooking} = useGetAllBooking();
 
     const submitFormBooking = (event) => {
         event.preventDefault();
@@ -53,7 +51,7 @@ const EditFormBooking = ({id}) => {
 
         if(isInvalidElements?.length === 0) {
             /**
-             * @type {Types.BookingUpdateData}
+             * @type {TotalAllPage}
              */
             const body = {
                 surname: stateForm.surname,
@@ -77,21 +75,15 @@ const EditFormBooking = ({id}) => {
     const change = (event) => changeInput(event, setStateForm, setIsPermitSubmitForm);
 
     useEffect(() => {
-        if(Array.isArray(curentDataBooking) && curentDataBooking.length > 0) {
-            /** 
-             * editFlights - обьект с данными бронирования
-             * @type {Types.FormBooking} 
-             */
-            const editBooking = curentDataBooking.find(booking => booking.id === id);
-            const state = convertObjBookingDataToStateForm(editBooking);
-            setStateForm(state);
-        }
-    },[curentDataBooking]); // eslint-disable-line
 
-    useEffect(() => {
-        if(curentDataBooking.length === 0) {
-            updateAllBooking();
-        }
+        httpSQL
+            .get(`/get-booking/${id}`)
+            .then(res => {
+                const state = convertObjBookingDataToStateForm(res.data);
+                setStateForm(state);
+            })
+            .catch(err => console.error(err));
+
     },[]); // eslint-disable-line
 
     return(
@@ -174,7 +166,7 @@ const EditFormBooking = ({id}) => {
                         {isPermitSubmitForm ? 'отправить' : 'проверка...'}
                     </button>
                     <button 
-                        type="submit" 
+                        type="button" 
                         className="btn btn-secondary mt-4" 
                         style={{marginLeft: '20px'}} 
                         onClick={() => navigate(-1)}

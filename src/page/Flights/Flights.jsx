@@ -4,11 +4,12 @@ import '../Booking/booking.scss';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { httpSQL } from '../../service/http.service';
-import LineForTableFlights from '../../components/LineForTableFlights/LineForTableBooking';
+import LineForTableFlights from '../../components/LineForTableFlights/LineForTableFlights.jsx';
 import HeaderForTableBooking from '../../components/HeaderForTableBooking/HeaderForTableBooking';
 import useGetAllFlights from '../../hooks/useGetAllFlights';
 import * as Types from '../../types.js'; // eslint-disable-line
 import TableControl from '../../components/TableControl/TableControl.jsx';
+import useTable from '../../hooks/useTable.js';
 
 
 /**
@@ -27,45 +28,12 @@ const Flights = () => {
      */
     const {updateAllFlights, curentDataFlights} = useGetAllFlights();
 
-    // /**
-    //  * selectedLine - Id выбранного обьекта для редактирования или удаления.
-    //  * @type {[number, function(number): void]}
-    //  */
-    // const [selectedLine, setSelectedLine] = useState(null);
-
-    // const editElement = (event) => {
-    //     const idElement = Number(event.target.id);
-    //     if(selectedLine === null || selectedLine !== idElement) {
-    //         setSelectedLine(idElement);
-    //     } else {
-    //         setSelectedLine(null);
-    //     }
-    // };
-
-    // const deleteElement = () => {
-    //     if(selectedLine === null) {
-    //         alert('Выберите рейс для удаления. Нажмите на номер рейса.');
-    //         return;
-    //     }
-
-    //     httpSQL
-    //         .delete('/delete-flights', {data: {id: selectedLine} })
-    //         .then(res => {
-    //             const msg = res.data?.msg;
-    //             if(msg === 'Запись удалена.') {
-    //                 setSelectedLine(null);
-    //                 updateAllFlights();
-    //             } else {
-    //                 setSelectedLine(null);
-    //                 alert(`${msg}`);
-    //             }
-    //         })
-    //         .catch(error => console.error(error));
-    // };
+    const {choiceLine, deleteLine, selectedLine} = useTable('/edit-booking', updateAllFlights);
 
     const infoBooking = curentDataFlights.map((order, i) => 
-        <LineForTableFlights order={order} edit={editElement} choice={selectedLine} key={i} />
+        <LineForTableFlights order={order} choiceLine={choiceLine} selectedLine={selectedLine} key={i} />
     );
+
 
     return(
         <>
@@ -104,8 +72,8 @@ const Flights = () => {
                     </tbody>
                 </table>
                 <TableControl 
-                    choiceBooking={selectedLine} 
-                    deleteElement={deleteElement} 
+                    choice={selectedLine} 
+                    deleteElement={deleteLine} 
                     pathAdd={'/add-flights'}
                     pathEdit={'/edit-flights'}
                 />

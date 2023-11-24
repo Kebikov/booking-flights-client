@@ -52,13 +52,14 @@
 
 /** 
  * @typedef {Object} UseFormBooking
- * @property {Types.FormBooking} stateForm - State с данными формы.
+ * @property {FormBooking} stateForm - State с данными формы.
  * @property {Function} setStateForm - Функция обновления данных state.
  * @property {Function} isPermitSubmitForm - State хранения доступности отправки данных формы.
  * @property {Function} setIsPermitSubmitForm - Функция изминения состояния isPermitSubmitForm.
  */
 
 /**
+ * @exports BookingData
  * @typedef {Object} BookingData
  * @property {number} id - Id записи.
  * @property {string} route - Уникальное имя рейса.
@@ -98,5 +99,6 @@
  * @property {number} flights - Количество страниц в таблице flights.
  */
 
+//export const Types = {};
 
-export const Types = {};
+

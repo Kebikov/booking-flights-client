@@ -5,6 +5,7 @@ import * as Types from '../types.js'; // eslint-disable-line
  * @returns {Types.FormBooking}
  */
 const convertObjBookingDataToStateForm = (bookingData) => {
+    console.log(bookingData);
     const state = {
         id: '', 
         value: '', 

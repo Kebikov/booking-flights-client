@@ -4,11 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPage, setTotalLineInPage } from '../../redux/slice/sliceForm';
 import * as Types from '../../types.js'; // eslint-disable-line
-import { useEffect } from 'react';
 
 /**
  * @typedef {Object} Propse
- * @property {number} choiceBooking - State, id выбранного обьекта для редактирования или удаления.
+ * @property {number} choice - State, id выбранного обьекта для редактирования или удаления.
  * @property {Function} deleteElement - Function, удаление брони.
  * @property {string} pathAdd - Путь к странице для добавления записи ("/add-booking").
  * @property {Function} pathEdit - Путь к странице для редактирования записи ("/edit-booking").
@@ -18,13 +17,14 @@ import { useEffect } from 'react';
  * COMPONENT > Блок управления в таблице.
  * @component
  * @example
- * <TableControl choiceBooking={...} deleteElement={...} />
+ * <TableControl choice={...} deleteElement={...} />
  * @param {Propse} 
- * @param {number} choiceBookingId - State, id выбранного обьекта для редактирования или удаления.
+ * @param {number} choiceId - State, id выбранного обьекта для редактирования или удаления.
  * @param {Function} deleteElement - Function удаление брони.
  */
 //= TableControl 
-const TableControl = ({choiceBooking, deleteElement, pathAdd, pathEdit}) => {
+const TableControl = ({choice, deleteElement, pathAdd, pathEdit}) => {
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     
@@ -47,10 +47,19 @@ const TableControl = ({choiceBooking, deleteElement, pathAdd, pathEdit}) => {
     //* изминение текушей отображаемой страницы
     const changeCurrentPage = (event) => {
         const value = Number(event.target.value);
-        if(totalAllPageObj.booking === 1) return;
-        if(currentPage === 1 && value === -1) return;
-        if(currentPage === totalAllPageObj.booking && value === 1) return;
-        dispatch( setCurrentPage(currentPage + value) );
+        if(pathAdd === '/add-flights') {
+            // работа в таблице Flights
+            if(totalAllPageObj.flights === 1) return;
+            if(currentPage === 1 && value === -1) return;
+            if(currentPage === totalAllPageObj.flights && value === 1) return;
+            dispatch( setCurrentPage(currentPage + value) );
+        } else {
+            // работа в таблице Booking
+            if(totalAllPageObj.booking === 1) return;
+            if(currentPage === 1 && value === -1) return;
+            if(currentPage === totalAllPageObj.booking && value === 1) return;
+            dispatch( setCurrentPage(currentPage + value) );
+        }
     };
 
     //* изминение количества отображаемых записей
@@ -59,11 +68,13 @@ const TableControl = ({choiceBooking, deleteElement, pathAdd, pathEdit}) => {
         dispatch( setTotalLineInPage(value) );
     };
 
-    useEffect(() => {
-        return () => {
+    const editLine = () => {
+        console.log('editLine');
+        if(choice) {
+            navigate(`${pathEdit}/${choice}`);
+        }
+    };
 
-        };
-    },[]);
 
     return(
         <div className="table-control">
@@ -84,12 +95,7 @@ const TableControl = ({choiceBooking, deleteElement, pathAdd, pathEdit}) => {
                     <button 
                         type="button" 
                         className="btn btn-outline-primary"
-                        onClick={
-                            choiceBooking ?
-                                () => navigate(`${pathEdit}/${choiceBooking}`)
-                                :
-                                null
-                        }
+                        onClick={editLine}
                     >
                         edit
                     </button>
@@ -114,7 +120,14 @@ const TableControl = ({choiceBooking, deleteElement, pathAdd, pathEdit}) => {
                     >
                         &laquo;
                     </button>
-                    <div className="page-list" >{`Стр. ${currentPage} из ${totalAllPageObj.booking}`}</div>
+                    <div className="page-list" >
+                        {
+                            pathAdd === '/add-flights' ?
+                                `Стр. ${currentPage} из ${totalAllPageObj.flights}`
+                                :
+                                `Стр. ${currentPage} из ${totalAllPageObj.booking}`
+                        }
+                    </div>
                     <button 
                         type="button" 
                         className="btn btn-outline-primary" 

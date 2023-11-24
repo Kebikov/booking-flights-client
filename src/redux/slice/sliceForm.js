@@ -41,7 +41,10 @@ const sliceForm = createSlice({
             state.currentPage = 1;
         },
         setCurrentPage: (state, actions) => {
-            if(actions.payload === 'DEFAULT_VALUE') return state.currentPage = 1;
+            if(actions.payload === 'DEFAULT_VALUE_CURRENT_PAGE') {
+                state.currentPage = 1;
+                return;
+            }
             state.currentPage = actions.payload;
         },
         setTotalAllPage: (state, actions) => {

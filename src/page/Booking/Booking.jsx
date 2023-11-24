@@ -1,13 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './booking.scss';
 import '../../scss/public.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { httpSQL } from '../../service/http.service';
 import * as Types from '../../types.js'; // eslint-disable-line
 import useGetAllBooking from '../../hooks/useGetAllBooking.js';
 import useGetAllFlights from '../../hooks/useGetAllFlights.js';
 import LineForTableBooking from '../../components/LineForTableBooking/LineForTableBooking.jsx';
 import TableControl from '../../components/TableControl/TableControl.jsx';
+import useTable from '../../hooks/useTable.js';
+import { setCurrentPage } from '../../redux/slice/sliceForm.js';
+import { useDispatch } from 'react-redux';
 
 
 /** 
@@ -16,6 +19,8 @@ import TableControl from '../../components/TableControl/TableControl.jsx';
  * @component
  */
 const Booking = () => {
+
+    const dispatch = useDispatch();
 
     /**
      * Hook useGetAllBooking return.
@@ -29,52 +34,54 @@ const Booking = () => {
      */
     const {updateAllFlights} = useGetAllFlights();
 
-    /**
-     * selectedLine - Id выбранного обьекта для редактирования или удаления.
-     * @type {[number, function(number): void]}
-     */
-    const [selectedLine, setSelectedLine] = useState(null);
+    // /**
+    //  * selectedLine - Id выбранного обьекта для редактирования или удаления.
+    //  * @type {[number, function(number): void]}
+    //  */
+    // const [selectedLine, setSelectedLine] = useState(null);
 
     //* Function удаление брони
-    const deleteElement = () => {
-        if(selectedLine === null) {
-            alert('Выберите бронь для удаления. Нажмите на номер рейса.');
-            return;
-        }
+    // const deleteElement = () => {
+    //     if(selectedLine === null) {
+    //         alert('Выберите бронь для удаления. Нажмите на номер рейса.');
+    //         return;
+    //     }
 
-        httpSQL
-            .delete('/delete-booking', {data: {id: selectedLine} })
-            .then(res => {
-                const msg = res.data?.msg;
-                if(msg === 'ENTRY_DELETED') {
-                    alert('Запись удалена.');
-                    setSelectedLine(null);
-                    updateAllBooking();
-                    updateAllFlights();
-                } else {
-                    setSelectedLine(null);
-                    alert(`${msg}`);
-                }
-            })
-            .catch(error => console.error(error));
-    };
+    //     httpSQL
+    //         .delete('/delete-booking', {data: {id: selectedLine} })
+    //         .then(res => {
+    //             const msg = res.data?.msg;
+    //             if(msg === 'ENTRY_DELETED') {
+    //                 alert('Запись удалена.');
+    //                 setSelectedLine(null);
+    //                 updateAllBooking();
+    //                 updateAllFlights();
+    //             } else {
+    //                 setSelectedLine(null);
+    //                 alert(`${msg}`);
+    //             }
+    //         })
+    //         .catch(error => console.error(error));
+    // };
 
     //* редактировани брони
-    const editElement = (event) => {
-        const idElement = Number(event.target.id);
-        if(selectedLine === null || selectedLine !== idElement) {
-            setSelectedLine(idElement);
-        } else {
-            setSelectedLine(null);
-        }
-    };
+    // const editElement = (event) => {
+    //     const idElement = Number(event.target.id);
+    //     if(selectedLine === null || selectedLine !== idElement) {
+    //         setSelectedLine(idElement);
+    //     } else {
+    //         setSelectedLine(null);
+    //     }
+    // };
+
+    const {choiceLine, deleteLine, selectedLine} = useTable('/delete-booking', updateAllBooking, updateAllFlights);
 
     /** 
      * Строки с информацией о бронировании. 
      * @type {Element[]} infoBooking 
      */
     const infoBooking = curentDataBooking.map((order, i) => 
-        <LineForTableBooking order={order} edit={editElement} choice={selectedLine} key={i} />
+        <LineForTableBooking order={order} choiceLine={choiceLine} selectedLine={selectedLine} key={i} />
     );
 
     return(
@@ -121,8 +128,8 @@ const Booking = () => {
                 </tbody>
             </table>
             <TableControl 
-                choiceBooking={selectedLine} 
-                deleteElement={deleteElement} 
+                choice={selectedLine} 
+                deleteElement={deleteLine} 
                 pathAdd={'/add-booking'}
                 pathEdit={'/edit-booking'}
             />

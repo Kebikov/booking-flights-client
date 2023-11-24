@@ -1,12 +1,12 @@
+import '../types.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurentDataBooking, setTotalAllPage } from '../redux/slice/sliceForm.js';
 import { httpSQL } from '../service/http.service.js';
-import * as Types from '../types.js'; // eslint-disable-line
 
 
 
 /**
- * @returns {Types.UseGetAllBooking}
+ * @returns {UseGetAllBooking}
  */
 const useGetAllBooking = () => {
     const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const useGetAllBooking = () => {
     /**
      * curentDataBooking
      * - Глобольный массив обьектов с данными бронирования.
-     * @type {Types.BookingData[]}
+     * @type {BookingData[]}
      */
     const curentDataBooking = useSelector(state => state.sliceForm.curentDataBooking);
 
@@ -36,12 +36,12 @@ const useGetAllBooking = () => {
         httpSQL
             .get(`/booking-data?total=${totalLineInPage}&page=${currentPage}`)
             .then(res => {
-                dispatch( setCurentDataBooking(res.data.rows) );
+                dispatch( setCurentDataBooking(res.data.dataBooking) );
                 dispatch( setTotalAllPage({booking: res.data.totalPagesBooking}) );
             })
             .catch(error => console.error(error));
     };
-    
+
     return {
         updateAllBooking,
         curentDataBooking

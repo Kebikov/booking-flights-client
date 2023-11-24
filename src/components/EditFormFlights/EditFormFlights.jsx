@@ -33,6 +33,7 @@ const EditFormFlights = ({id}) => {
         isPermitSubmitForm,
         setIsPermitSubmitForm
     } = useFormFlights();
+    
     /** 
      * Результат использования функции useFormFlights.
      * @property {Types.FlightsData[]} curentDataFlights - Массив со всеми рейсами.
@@ -68,20 +69,19 @@ const EditFormFlights = ({id}) => {
     useEffect(() => {
         if(Array.isArray(curentDataFlights) && curentDataFlights.length > 0) {
             /** editFlights - обьект с данными рейса
-            * @type {Types.FlightsData} */
+            * @type {FlightsData} */
             const editFlights = curentDataFlights.find(flights => flights.id === id);
             const state = convertObjFlightsDataToStateForm(editFlights);
             setStateForm(state);
         }
-    },[curentDataFlights]); // eslint-disable-line
-
-    useEffect(() => {
-        if(curentDataFlights.length === 0) {
-            updateAllFlights();
-        }
+        httpSQL
+            .get(`/get-flights/${id}`)
+            .then(res => {
+                const state = convertObjFlightsDataToStateForm(res.data);
+                setStateForm(state);
+            })
+            .catch(err => console.error(err));
     },[]); // eslint-disable-line
-
-    
 
     return(
         <div className="popup-form-flights">
@@ -174,11 +174,12 @@ const EditFormFlights = ({id}) => {
                         {isPermitSubmitForm ? 'отправить' : 'проверка...'}
                     </button>
                     <button 
-                        type="submit" 
+                        type="button" 
                         className="btn btn-secondary mt-4" 
                         style={{marginLeft: '20px'}} 
                         onClick={() => navigate(-1)}
-                    >отмена
+                    >
+                        отмена
                     </button>
                 </form>
             </div>
