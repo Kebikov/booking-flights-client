@@ -2,13 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import * as Types from '../../types.js'; // eslint-disable-line
 
 
+
 /**
  * @typedef {Object} InitialState
  * @property {Types.FlightsData} curentDataFlights - Тукушее загруженые обьекты  рейсов.
  * @property {Types.BookingData} curentDataBooking - Тукушее загруженые обьекты  брони.
- * @property {Types.TotalAllPage} totalAllPageObj - Обьект с количеством страниц.
- * @property {number} totalLineInPage - Установленое количество отображаемых записей.
- * @property {number} currentPage - Номер текушей просматриваемой страницы.
+ * @property {Types.TotalAllPage} totalAllPageObj - Обьект с обшим количеством страниц Booking и Flights.
+ * @property {number} totalLineInPage - Установленое количество отображаемых записей на странице за раз.
+ * @property {number} currentPage - Установленый номер текушей просматриваемой страницы.
  */
 
 /**
@@ -37,8 +38,10 @@ const sliceForm = createSlice({
         },
         setTotalLineInPage: (state, actions) => {
             state.totalLineInPage = actions.payload;
+            state.currentPage = 1;
         },
         setCurrentPage: (state, actions) => {
+            if(actions.payload === 'DEFAULT_VALUE') return state.currentPage = 1;
             state.currentPage = actions.payload;
         },
         setTotalAllPage: (state, actions) => {

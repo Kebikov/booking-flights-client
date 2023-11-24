@@ -8,6 +8,7 @@ import LineForTableFlights from '../../components/LineForTableFlights/LineForTab
 import HeaderForTableBooking from '../../components/HeaderForTableBooking/HeaderForTableBooking';
 import useGetAllFlights from '../../hooks/useGetAllFlights';
 import * as Types from '../../types.js'; // eslint-disable-line
+import TableControl from '../../components/TableControl/TableControl.jsx';
 
 
 /**
@@ -20,51 +21,50 @@ import * as Types from '../../types.js'; // eslint-disable-line
 //-- Flights 
 const Flights = () => {
 
-    const navigate = useNavigate();
     /**
      * Hook useGetAllFlights return.
      * @type {Types.UseGetAllFlights}
      */
     const {updateAllFlights, curentDataFlights} = useGetAllFlights();
 
-    /**
-     * choiceFlights - Id выбранного обьекта для редактирования или удаления.
-     * @type {[number, function(number): void]}
-     */
-    const [choiceFlights, setChoiceFlights] = useState(null);
+    // /**
+    //  * selectedLine - Id выбранного обьекта для редактирования или удаления.
+    //  * @type {[number, function(number): void]}
+    //  */
+    // const [selectedLine, setSelectedLine] = useState(null);
 
-    const editElement = (event) => {
-        const idElement = Number(event.target.id);
-        if(choiceFlights === null || choiceFlights !== idElement) {
-            setChoiceFlights(idElement);
-        } else {
-            setChoiceFlights(null);
-        }
-    };
+    // const editElement = (event) => {
+    //     const idElement = Number(event.target.id);
+    //     if(selectedLine === null || selectedLine !== idElement) {
+    //         setSelectedLine(idElement);
+    //     } else {
+    //         setSelectedLine(null);
+    //     }
+    // };
 
-    const deleteElement = () => {
-        if(choiceFlights === null) {
-            alert('Выберите рейс для удаления. Нажмите на номер рейса.');
-            return;
-        }
+    // const deleteElement = () => {
+    //     if(selectedLine === null) {
+    //         alert('Выберите рейс для удаления. Нажмите на номер рейса.');
+    //         return;
+    //     }
 
-        httpSQL
-            .delete('/delete-flights', {data: {id: choiceFlights} })
-            .then(res => {
-                const msg = res.data?.msg;
-                if(msg === 'Рейс удален.') {
-                    setChoiceFlights(null);
-                    updateAllFlights();
-                } else {
-                    setChoiceFlights(null);
-                    alert(`${msg}`);
-                }
-            })
-            .catch(error => console.error(error));
-    };
+    //     httpSQL
+    //         .delete('/delete-flights', {data: {id: selectedLine} })
+    //         .then(res => {
+    //             const msg = res.data?.msg;
+    //             if(msg === 'Запись удалена.') {
+    //                 setSelectedLine(null);
+    //                 updateAllFlights();
+    //             } else {
+    //                 setSelectedLine(null);
+    //                 alert(`${msg}`);
+    //             }
+    //         })
+    //         .catch(error => console.error(error));
+    // };
 
     const infoBooking = curentDataFlights.map((order, i) => 
-        <LineForTableFlights order={order} edit={editElement} choice={choiceFlights} key={i} />
+        <LineForTableFlights order={order} edit={editElement} choice={selectedLine} key={i} />
     );
 
     return(
@@ -103,38 +103,12 @@ const Flights = () => {
                         {infoBooking}
                     </tbody>
                 </table>
-                <div className="table-control">
-                    <div className="table-control__body">
-                        <div className="btn-group" role="group" aria-label="Basic outlined example">
-                            <button 
-                                type="button" 
-                                className="btn btn-outline-primary"
-                                onClick={() => navigate('/add-flights')}
-                            >
-                                add
-                            </button>
-                            <button 
-                                type="button" 
-                                className="btn btn-outline-primary"
-                                onClick={
-                                    choiceFlights ?
-                                        () => navigate(`/edit-flights/${choiceFlights}`)
-                                        :
-                                        null
-                                }
-                            >
-                                edit
-                            </button>
-                            <button 
-                                type="button" 
-                                className="btn btn-outline-primary" 
-                                onClick={deleteElement}
-                            >
-                                del
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <TableControl 
+                    choiceBooking={selectedLine} 
+                    deleteElement={deleteElement} 
+                    pathAdd={'/add-flights'}
+                    pathEdit={'/edit-flights'}
+                />
             </div>
         </>
     );

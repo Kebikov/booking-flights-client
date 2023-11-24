@@ -4,11 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPage, setTotalLineInPage } from '../../redux/slice/sliceForm';
 import * as Types from '../../types.js'; // eslint-disable-line
+import { useEffect } from 'react';
 
 /**
  * @typedef {Object} Propse
  * @property {number} choiceBooking - State, id выбранного обьекта для редактирования или удаления.
  * @property {Function} deleteElement - Function, удаление брони.
+ * @property {string} pathAdd - Путь к странице для добавления записи ("/add-booking").
+ * @property {Function} pathEdit - Путь к странице для редактирования записи ("/edit-booking").
  */
 
 /** 
@@ -20,7 +23,8 @@ import * as Types from '../../types.js'; // eslint-disable-line
  * @param {number} choiceBookingId - State, id выбранного обьекта для редактирования или удаления.
  * @param {Function} deleteElement - Function удаление брони.
  */
-const TableControl = ({choiceBooking, deleteElement}) => {
+//= TableControl 
+const TableControl = ({choiceBooking, deleteElement, pathAdd, pathEdit}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     
@@ -53,8 +57,13 @@ const TableControl = ({choiceBooking, deleteElement}) => {
     const changeTotalLineInPage = (event) => {
         const value = Number(event.target.value);
         dispatch( setTotalLineInPage(value) );
-        dispatch( setCurrentPage(1) );
     };
+
+    useEffect(() => {
+        return () => {
+
+        };
+    },[]);
 
     return(
         <div className="table-control">
@@ -68,7 +77,7 @@ const TableControl = ({choiceBooking, deleteElement}) => {
                     <button 
                         type="button" 
                         className="btn btn-outline-primary"
-                        onClick={() => navigate('/add-booking')}
+                        onClick={() => navigate(pathAdd)}
                     >
                         add
                     </button>
@@ -77,7 +86,7 @@ const TableControl = ({choiceBooking, deleteElement}) => {
                         className="btn btn-outline-primary"
                         onClick={
                             choiceBooking ?
-                                () => navigate(`/edit-booking/${choiceBooking}`)
+                                () => navigate(`${pathEdit}/${choiceBooking}`)
                                 :
                                 null
                         }

@@ -1,9 +1,5 @@
 import './header.scss';
 import { NavLink } from 'react-router-dom';
-import { useEffect } from 'react';
-import useGetAllFlights from '../../hooks/useGetAllFlights';
-import useGetAllBooking from '../../hooks/useGetAllBooking';
-import { useSelector } from 'react-redux';
 
 /**
  * Component > menu in header
@@ -11,27 +7,6 @@ import { useSelector } from 'react-redux';
  * @component
  */
 const Header = () => {
-
-    /**
-     * @type {number} totalLineInPage 
-     * - Установленое количество отображаемых записей.
-     */
-    const totalLineInPage = useSelector(state => state.sliceForm.totalLineInPage);
-    /**
-     * @type {number} currentPage
-     * - Номер текушей просматриваемой страницы.
-     */
-    const currentPage = useSelector(state => state.sliceForm.currentPage); 
-
-    const {updateAllFlights} = useGetAllFlights();
-    const {updateAllBooking} = useGetAllBooking();
-
-    useEffect(() => {
-        // получение в глобальное состояние всех рейсов 
-        updateAllFlights();
-        // получение в глобальное состояние всей брони
-        updateAllBooking();
-    },[totalLineInPage, currentPage]); // eslint-disable-line 
 
     return(
         <nav className="navbar-menu">

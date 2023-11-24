@@ -30,29 +30,29 @@ const Booking = () => {
     const {updateAllFlights} = useGetAllFlights();
 
     /**
-     * choiceFlights - Id выбранного обьекта для редактирования или удаления.
+     * selectedLine - Id выбранного обьекта для редактирования или удаления.
      * @type {[number, function(number): void]}
      */
-    const [choiceBooking, setChoiceBooking] = useState(null);
+    const [selectedLine, setSelectedLine] = useState(null);
 
     //* Function удаление брони
     const deleteElement = () => {
-        if(choiceBooking === null) {
+        if(selectedLine === null) {
             alert('Выберите бронь для удаления. Нажмите на номер рейса.');
             return;
         }
 
         httpSQL
-            .delete('/delete-booking', {data: {id: choiceBooking} })
+            .delete('/delete-booking', {data: {id: selectedLine} })
             .then(res => {
                 const msg = res.data?.msg;
-                if(msg === 'BOOKING_DELETED') {
-                    alert('Бронь удалена.');
-                    setChoiceBooking(null);
+                if(msg === 'ENTRY_DELETED') {
+                    alert('Запись удалена.');
+                    setSelectedLine(null);
                     updateAllBooking();
                     updateAllFlights();
                 } else {
-                    setChoiceBooking(null);
+                    setSelectedLine(null);
                     alert(`${msg}`);
                 }
             })
@@ -62,10 +62,10 @@ const Booking = () => {
     //* редактировани брони
     const editElement = (event) => {
         const idElement = Number(event.target.id);
-        if(choiceBooking === null || choiceBooking !== idElement) {
-            setChoiceBooking(idElement);
+        if(selectedLine === null || selectedLine !== idElement) {
+            setSelectedLine(idElement);
         } else {
-            setChoiceBooking(null);
+            setSelectedLine(null);
         }
     };
 
@@ -74,7 +74,7 @@ const Booking = () => {
      * @type {Element[]} infoBooking 
      */
     const infoBooking = curentDataBooking.map((order, i) => 
-        <LineForTableBooking order={order} edit={editElement} choice={choiceBooking} key={i} />
+        <LineForTableBooking order={order} edit={editElement} choice={selectedLine} key={i} />
     );
 
     return(
@@ -121,8 +121,10 @@ const Booking = () => {
                 </tbody>
             </table>
             <TableControl 
-                choiceBooking={choiceBooking} 
+                choiceBooking={selectedLine} 
                 deleteElement={deleteElement} 
+                pathAdd={'/add-booking'}
+                pathEdit={'/edit-booking'}
             />
         </div>
     );

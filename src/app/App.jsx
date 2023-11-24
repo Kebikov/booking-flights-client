@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
+import useStartApp from '../hooks/useStartApp';
 
 import Flights from '../page/Flights/Flights';
 import Booking from '../page/Booking/Booking';
@@ -17,6 +18,8 @@ const EditBooking = lazy(() => import('../page/EditBooking/EditBooking'));
 
 
 const App = () =>  {
+
+    useStartApp();
 
     return (
         <BrowserRouter>
