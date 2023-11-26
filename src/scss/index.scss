@@ -1,6 +1,5 @@
 @import 'fonts';
 
-
 *{
     padding: 0;
     margin: 0;
@@ -41,6 +40,7 @@
 }
 
 .wrapper{
+    width: 100%;
     min-height: 100%;
     display: flex;
     justify-content: space-between;

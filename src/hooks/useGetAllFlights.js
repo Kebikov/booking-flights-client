@@ -1,26 +1,32 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurentDataFlights, setTotalAllPage } from '../redux/slice/sliceForm.js';
 import { httpSQL } from '../service/http.service.js';
-import * as Types from '../types.js'; // eslint-disable-line
+import delayFnc from '../helpers/delay.js';
+import { useEffect, useRef } from 'react';
+import '../types.js';
 
 
 const useGetAllFlights = () => {
-    const dispatch = useDispatch();
 
+    const dispatch = useDispatch();
+    // первый ли это рендер компонента
+    const isFirstRender = useRef(true);
+
+    const filterDataFlights = useSelector(state => state.sliceForm.filterDataFlights);
     /**
-     * @type {number} totalLineInPage 
-     * - Установленое количество отображаемых записей.
+     * Установленое количество отображаемых записей.
+     * @type {number}
      */
     const totalLineInPage = useSelector(state => state.sliceForm.totalLineInPage);
     /**
+     * Номер текушей просматриваемой страницы.
      * @type {number} currentPage
-     * - Номер текушей просматриваемой страницы.
      */
     const currentPage = useSelector(state => state.sliceForm.currentPage); 
 
     /**
      * Глобольный массив обьектов с данными рейсов.
-     * @type {Types.FlightsData[]}
+     * @type {FlightsData[]}
      */
     const curentDataFlights = useSelector(state => state.sliceForm.curentDataFlights);
 
@@ -29,13 +35,21 @@ const useGetAllFlights = () => {
      */
     const updateAllFlights = () => {
         httpSQL
-            .get(`/flights-data?total=${totalLineInPage}&page=${currentPage}`)
+            .post(`/flights-data?total=${totalLineInPage}&page=${currentPage}`, {...filterDataFlights})
             .then(res => {
                 dispatch( setCurentDataFlights(res.data.dataFlights) );
-                dispatch( setTotalAllPage({flights: res.data.totalPagesBooking}) );
+                dispatch( setTotalAllPage({flights: res.data.totalPages}) );
             })
             .catch(error => console.error(error));
     };
+
+    useEffect(() => {
+        if(!isFirstRender.current) {
+            delayFnc(updateAllFlights, 1000);
+        } else {
+            isFirstRender.current = false;
+        }
+    },[filterDataFlights]); // eslint-disable-line 
     
     return {
         updateAllFlights,

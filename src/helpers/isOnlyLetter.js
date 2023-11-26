@@ -1,8 +1,8 @@
-import * as Types from '../types.js'; // eslint-disable-line 
+import '../types.js'; 
 
 /**
  * Проверка, все есть ли в строке цыфры.
- * @param {Types.StateForm | Types.FormBooking} stateForm - Обьект состояния из state.
+ * @param {StateForm | FormBooking} stateForm - Обьект состояния из state.
  * @param {Function} deleteAddedClasses - Функция удаление дополнительных классов.
  * @return {void} Установит класс в зависимости от результата проверки.
  */

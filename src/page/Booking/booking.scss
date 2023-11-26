@@ -6,7 +6,11 @@
 }
 
 .table-booking {
-    padding: 20px;
+    overflow: auto;
+}
+
+._width-table {
+    min-width: 1200px;
 }
 
 .table-input {
@@ -15,11 +19,18 @@
 }
 
 .table-control {
-    
+    display: flex;
+    justify-content: center;
     &__body {
-
         display: flex;
+        width: 100%;
         justify-content: space-between;
+        @media (max-width: 760px){
+            width: 300px;
+            padding: 10px;
+            flex-direction: column;
+            gap: 10px;
+        }
     }
     &__select {
         flex: 0 1 20%;

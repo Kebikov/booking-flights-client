@@ -3,7 +3,7 @@ import './formFlights.scss';
 import { useNavigate } from 'react-router-dom';
 import { httpSQL } from '../../service/http.service.js';
 import useFormFlights from '../../hooks/useFormFlights.js';
-import * as Types from '../../types.js'; // eslint-disable-line
+import '../../types.js';
 import changeInput from '../../helpers/changeInput.js';
 
 /** COMPONENT > Форма для добавления рейса в БД.
@@ -15,7 +15,7 @@ const FormFlights = () => {
 
     /** 
      * Hook useFormFlights return. 
-     * @type {Types.UseFormFlights} 
+     * @type {UseFormFlights} 
      */ 
     const {
         stateForm, 

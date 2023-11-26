@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../FormFlights/formFlights.scss';
-import * as Types from '../../types.js'; // eslint-disable-line 
+import '../../types.js';
 import convertObjFlightsDataToStateForm from '../../helpers/convertObjFlightsDataToStateForm.js';
 import convertObjStateFormToFlightsData from '../../helpers/convertObjStateFormToFlightsData.js';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import changeInput from '../../helpers/changeInput.js';
 
 /** 
- * COMPONENT > Форма для редактирования рейса в БД
+ * COMPONENT > Форма для редактирования рейса в БД.
  * @component
  * @example
  * <EditFormFlights id={...} />
@@ -23,7 +23,7 @@ const EditFormFlights = ({id}) => {
     const navigate = useNavigate();
     /** 
      * Результат использования функции useFormFlights.
-     * @type {Types.UseFormFlights} 
+     * @type {UseFormFlights} 
      */ 
     const {
         stateForm, 
@@ -36,10 +36,9 @@ const EditFormFlights = ({id}) => {
     
     /** 
      * Результат использования функции useFormFlights.
-     * @property {Types.FlightsData[]} curentDataFlights - Массив со всеми рейсами.
      * @property {function} updateAllFlights - Функция обновления данных о рейсах.
      */
-    const {curentDataFlights, updateAllFlights} = useGetAllFlights();
+    const {updateAllFlights} = useGetAllFlights();
 
     /**
      * Отправка данных на сервер при submit
@@ -67,13 +66,6 @@ const EditFormFlights = ({id}) => {
     const change = (event) => changeInput(event, setStateForm, setIsPermitSubmitForm);
     
     useEffect(() => {
-        if(Array.isArray(curentDataFlights) && curentDataFlights.length > 0) {
-            /** editFlights - обьект с данными рейса
-            * @type {FlightsData} */
-            const editFlights = curentDataFlights.find(flights => flights.id === id);
-            const state = convertObjFlightsDataToStateForm(editFlights);
-            setStateForm(state);
-        }
         httpSQL
             .get(`/get-flights/${id}`)
             .then(res => {

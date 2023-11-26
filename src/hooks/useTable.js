@@ -15,7 +15,7 @@ import { setCurrentPage } from '../redux/slice/sliceForm.js';
 /**
  * Hook для работы с таблицами Booking и Flights.
  * @param {string} path - Путь адресной строки ("/delete-booking").
- * @param  {Function[]} upDateFunctions - Функции обновления данных.
+ * @param  {Function[]} upDateFunctions - Функции обновления глобальный данных.
  * @example
  * const {} = useTable(path, ...upDateFunctions);
  * @returns {HookReturnUseTable}
@@ -26,11 +26,16 @@ const useTable = (path, ...upDateFunctions) => {
     const dispatch = useDispatch();
 
     /**
-     * selectedLine - Id выбранного обьекта для редактирования или удаления.
+     * selectedLine - State,с Id выбранного обьекта для редактирования или удаления.
      * @type {[number, function(number): void]}
      */
     const [selectedLine, setSelectedLine] = useState(null);
 
+
+    /**
+     * Выбор записи, при клике на элемент запишет его id в state, при повторном клике удалит его из state.
+     * @param {Event} event - Событие элемента. 
+     */
     const choiceLine = (event) => {
         const idLine = Number(event.target.id);
         if(selectedLine === null || selectedLine !== idLine) {
@@ -40,6 +45,9 @@ const useTable = (path, ...upDateFunctions) => {
         }
     };
 
+    /**
+     * Удаление записи из БД.
+     */
     const deleteLine = () => {
         if(selectedLine === null) {
             alert('Выберите рейс для удаления. Нажмите на номер рейса.');
@@ -61,6 +69,9 @@ const useTable = (path, ...upDateFunctions) => {
             .catch(error => console.error(error));
     };
 
+    /**
+     * Возврат к начальному состоянию текушей просмотриваемой страницы при размонтировании.
+     */
     useEffect(() => {
         return () => {
             dispatch( setCurrentPage('DEFAULT_VALUE_CURRENT_PAGE') );

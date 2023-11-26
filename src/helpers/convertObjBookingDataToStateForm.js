@@ -1,11 +1,11 @@
-import * as Types from '../types.js'; // eslint-disable-line 
+import '../types.js'; 
 
 /** Функция конвертации обьекта с type BookingData в обьект с type FormBooking
- * @param {Types.BookingData} bookingData 
- * @returns {Types.FormBooking}
+ * @param {BookingData} bookingData 
+ * @returns {FormBooking}
  */
 const convertObjBookingDataToStateForm = (bookingData) => {
-    console.log(bookingData);
+
     const state = {
         id: '', 
         value: '', 

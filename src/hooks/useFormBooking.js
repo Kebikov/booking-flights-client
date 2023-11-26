@@ -1,4 +1,4 @@
-import * as Types from '../types.js'; // eslint-disable-line 
+import '../types.js'; 
 import { useState, useEffect } from 'react';
 import delayFnc from '../helpers/delay.js';
 import { httpSQL } from '../service/http.service.js';
@@ -9,7 +9,7 @@ const useFormBooking = () => {
 
     /** 
      * State для хранения всех данных формы
-     * @type {[Types.FormBooking, function(Types.FormBooking): void]}
+     * @type {[FormBooking, function(FormBooking): void]}
      */
     const [stateForm, setStateForm] = useState({
         id: '', value: '', target: '', route: '', surname: '', name: '',
@@ -69,8 +69,6 @@ const useFormBooking = () => {
             return;
         }
     };
-
-
 
     useEffect(() => {
         if(stateForm.id) delayFnc(checkData, 1000);

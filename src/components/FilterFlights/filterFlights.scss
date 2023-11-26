@@ -1,0 +1,23 @@
+@import '../../scss/mixin.scss';
+
+.reset {
+    @include text_streach(14, 14, #fff, 400);
+    padding: 4px 30px 4px 10px;
+    background: rgb(63, 113, 174);
+    position: relative;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        right: 5px;
+        width: 20px;
+        height: 20px;
+        background:url('../../resources/img/icon/filters_icon.png') 0 0 / cover no-repeat;
+    }
+}
+
+.th_reset {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

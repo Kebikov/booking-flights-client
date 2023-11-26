@@ -4,3 +4,7 @@
     text-align: center;
     @include text_streach (24, 20, #000);
 }
+
+.cursor {
+    cursor: pointer;
+}

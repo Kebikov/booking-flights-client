@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { httpSQL } from '../service/http.service.js';
-import * as Types from '../types.js'; // eslint-disable-line 
+import '../types.js';
 import delayFnc from '../helpers/delay.js';
 import isOnlyLetter from '../helpers/isOnlyLetter.js';
 
 const useFormFlights = () => {
     /** 
      * Состояние для хранения всех данных формы.
-     * @type {[Types.StateForm, function(Types.StateForm): void]}
+     * @type {[StateForm, function(StateForm): void]}
      */
     const [stateForm, setStateForm] = useState({
         id: '', value: '-', target: '', route: '', city: '', dateRoute: '', timeRoute: '', 
@@ -43,7 +43,7 @@ const useFormFlights = () => {
      * @return {void}
      */
     const checkData = () => {
-        console.log('проверка');
+        
         setIsPermitSubmitForm(true);
         //* если значение пустае удаляем все доп.класы
         if(stateForm.value === '') {

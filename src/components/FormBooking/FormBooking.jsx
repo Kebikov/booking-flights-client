@@ -3,7 +3,7 @@ import '../FormFlights/formFlights.scss';
 import { useNavigate } from 'react-router-dom';
 import { httpSQL } from '../../service/http.service.js';
 import useFormBooking from '../../hooks/useFormBooking.js';
-import * as Types from '../../types.js'; // eslint-disable-line
+import '../../types.js';
 import changeInput from '../../helpers/changeInput.js';
 import useGetAllFlights from '../../hooks/useGetAllFlights.js';
 
@@ -21,7 +21,7 @@ const FormBooking = () => {
     const {updateAllFlights} = useGetAllFlights();
     /** 
      * Hook useFormBooking return.
-     * @type {Types.UseFormBooking}
+     * @type {UseFormBooking}
      */
     const {
         stateForm, 

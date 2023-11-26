@@ -1,29 +1,55 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../scss/public.scss';
+import '../../types.js';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPage, setTotalLineInPage } from '../../redux/slice/sliceForm';
-import * as Types from '../../types.js'; // eslint-disable-line
+import { httpSQL } from '../../service/http.service.js';
+import { useEffect } from 'react';
+import delayFnc from '../../helpers/delay';
 
 /**
  * @typedef {Object} Propse
  * @property {number} choice - State, id выбранного обьекта для редактирования или удаления.
  * @property {Function} deleteElement - Function, удаление брони.
- * @property {string} pathAdd - Путь к странице для добавления записи ("/add-booking").
- * @property {Function} pathEdit - Путь к странице для редактирования записи ("/edit-booking").
+ * @property {string} table - Имя таблицы.
  */
 
 /** 
  * COMPONENT > Блок управления в таблице.
  * @component
  * @example
- * <TableControl choice={...} deleteElement={...} />
+ * <TableControl 
+ *     choice={...} 
+ *     deleteElement={...} 
+ *     table={...} 
+ *     filterState={...} 
+ *     setFilterState={...}
+ * />
  * @param {Propse} 
- * @param {number} choiceId - State, id выбранного обьекта для редактирования или удаления.
- * @param {Function} deleteElement - Function удаление брони.
  */
 //= TableControl 
-const TableControl = ({choice, deleteElement, pathAdd, pathEdit}) => {
+const TableControl = ({choice, deleteElement, table}) => {
+
+    let pathAdd;
+    let pathEdit;
+
+    switch (table) { 
+
+    case 'flights':
+        pathAdd = '/add-flights';
+        pathEdit = '/edit-flights';
+        break;
+    case 'booking':
+        pathAdd = '/add-booking';
+        pathEdit = '/edit-booking';
+        break;
+    default: 
+        pathAdd = '';
+        pathEdit = '';
+        break;
+
+    };
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -39,7 +65,7 @@ const TableControl = ({choice, deleteElement, pathAdd, pathEdit}) => {
      */
     const currentPage = useSelector(state => state.sliceForm.currentPage);
     /**
-     * @type {Types.TotalAllPage} totalAllPageObj 
+     * @type {TotalAllPage} totalAllPageObj 
      * - Обьект с количеством страниц.
      */
     const totalAllPageObj = useSelector(state => state.sliceForm.totalAllPageObj);
@@ -47,19 +73,11 @@ const TableControl = ({choice, deleteElement, pathAdd, pathEdit}) => {
     //* изминение текушей отображаемой страницы
     const changeCurrentPage = (event) => {
         const value = Number(event.target.value);
-        if(pathAdd === '/add-flights') {
-            // работа в таблице Flights
-            if(totalAllPageObj.flights === 1) return;
-            if(currentPage === 1 && value === -1) return;
-            if(currentPage === totalAllPageObj.flights && value === 1) return;
-            dispatch( setCurrentPage(currentPage + value) );
-        } else {
-            // работа в таблице Booking
-            if(totalAllPageObj.booking === 1) return;
-            if(currentPage === 1 && value === -1) return;
-            if(currentPage === totalAllPageObj.booking && value === 1) return;
-            dispatch( setCurrentPage(currentPage + value) );
-        }
+        // работа в таблице Flights
+        if(totalAllPageObj[table] === 1) return;
+        if(currentPage === 1 && value === -1) return;
+        if(currentPage === totalAllPageObj[table] && value === 1) return;
+        dispatch( setCurrentPage(currentPage + value) );
     };
 
     //* изминение количества отображаемых записей
@@ -69,12 +87,10 @@ const TableControl = ({choice, deleteElement, pathAdd, pathEdit}) => {
     };
 
     const editLine = () => {
-        console.log('editLine');
         if(choice) {
             navigate(`${pathEdit}/${choice}`);
         }
     };
-
 
     return(
         <div className="table-control">
@@ -122,10 +138,10 @@ const TableControl = ({choice, deleteElement, pathAdd, pathEdit}) => {
                     </button>
                     <div className="page-list" >
                         {
-                            pathAdd === '/add-flights' ?
-                                `Стр. ${currentPage} из ${totalAllPageObj.flights}`
+                            totalAllPageObj[table] === 0 ?
+                                'Нет данных'
                                 :
-                                `Стр. ${currentPage} из ${totalAllPageObj.booking}`
+                                `Стр. ${currentPage} из ${totalAllPageObj[table]}`
                         }
                     </div>
                     <button 

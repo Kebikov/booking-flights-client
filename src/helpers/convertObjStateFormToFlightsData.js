@@ -1,8 +1,8 @@
-import * as Types from '../types.js'; // eslint-disable-line 
+import '../types.js'; 
 
 /** Функция конвертации обьекта с type StateForm  в обьект с type FlightsData
- * @param {Types.StateForm} flightsData 
- * @returns {Types.FlightsData}
+ * @param {StateForm} flightsData 
+ * @returns {FlightsData}
  */
 const convertObjStateFormToFlightsData = (stateForm) => {
 
