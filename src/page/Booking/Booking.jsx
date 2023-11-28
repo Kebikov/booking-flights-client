@@ -7,8 +7,8 @@ import useGetAllFlights from '../../hooks/useGetAllFlights.js';
 import LineForTableBooking from '../../components/LineForTableBooking/LineForTableBooking.jsx';
 import TableControl from '../../components/TableControl/TableControl.jsx';
 import useTable from '../../hooks/useTable.js';
-import { useState } from 'react';
-
+import HeaderForTableBooking from '../../components/HeaderForTableBooking/HeaderForTableBooking.jsx';
+import FilterBooking from '../../components/FilterBooking/FilterBooking.jsx';
 
 
 /** 
@@ -17,15 +17,6 @@ import { useState } from 'react';
  * @component
  */
 const Booking = () => {
-    
-    /**
-     * State c данными, для фильтрации брони.
-     * @type {[FilterBookingData, function(FilterBookingData): void]}
-     */
-    const [filterState, setFilterState] = useState({
-        moreLessId: '', moreLessState: '', route: '', surname: '',
-        name: '', middleName: '', date: '', sit: ''
-    });
 
     /**
      * Hook useGetAllBooking return.
@@ -49,44 +40,15 @@ const Booking = () => {
         <LineForTableBooking order={order} choiceLine={choiceLine} selectedLine={selectedLine} key={i} />
     );
 
+    
     return(
         <div className="table-booking">
             <table className="table">
                 <thead>
-                    <tr>
-                        <th scope="col">РЕЙС</th>
-                        <th scope="col">ФАМИЛИЯ</th>
-                        <th scope="col">ИМЯ</th>
-                        <th scope="col">ОТЧЕСТВО</th>
-                        <th scope="col">ДАТА БРОНИ</th>
-                        <th scope="col">№ МЕСТА</th>
-                        <th scope="col">ПРИМЕЧАНИЯ</th>
-                    </tr>
+                    <HeaderForTableBooking/>
                 </thead>
                 <thead>
-                    <tr>
-                        <th scope="col">
-                            <input className="table-input" type="text" />
-                        </th>
-                        <th scope="col">
-                            <input className="table-input" type="text" />
-                        </th>
-                        <th scope="col">
-                            <input className="table-input" type="text" />
-                        </th>
-                        <th scope="col">
-                            <input className="table-input" type="text" />
-                        </th>
-                        <th scope="col">
-                            <input className="table-input" type="text" />
-                        </th>
-                        <th scope="col">
-                            <input className="table-input" type="text" />
-                        </th>
-                        <th scope="col">
-                            <input className="table-input" type="text" />
-                        </th>
-                    </tr>
+                    <FilterBooking/>
                 </thead>
                 <tbody>
                     {infoBooking}
@@ -96,8 +58,6 @@ const Booking = () => {
                 choice={selectedLine} 
                 deleteElement={deleteLine} 
                 table={'booking'}
-                filterState={filterState}
-                setFilterState={setFilterState}
             />
         </div>
     );

@@ -1,12 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import '../../types.js'; 
 
-const defaultFilterDataFlights = {moreLessId: '', moreLessState: '', route: '', city: '', date: '', company: '', checkIn: '', freePlace: ''};
-
 /**
  * @typedef {Object} InitialState
  * @property {FlightsData} curentDataFlights - Тукушее загруженые обьекты  рейсов.
- * @property {FilterFlightsData} filterDataFlights - Обьект c данными, для фильтрации рейсов.
+ * @property {FilterData} filterData - Обьект c данными, для фильтрации рейсов.
  * @property {BookingData} curentDataBooking - Тукушее загруженые обьекты  брони.
  * @property {TotalAllPage} totalAllPageObj - Обьект с обшим количеством страниц Booking и Flights.
  * @property {number} totalLineInPage - Установленое количество отображаемых записей на странице за раз.
@@ -18,7 +16,7 @@ const defaultFilterDataFlights = {moreLessId: '', moreLessState: '', route: '', 
  */
 const initialState = {
     curentDataFlights: [],
-    filterDataFlights: defaultFilterDataFlights,
+    filterData: {},
     curentDataBooking: [], 
     totalAllPageObj: {
         booking: 0,
@@ -52,25 +50,25 @@ const sliceForm = createSlice({
         setTotalAllPage: (state, actions) => {
             state.totalAllPageObj = {...state.totalAllPageObj, ...actions.payload};
         },
-        setFilterDataFlights: (state, actions) => {
+        setFilterData: (state, actions) => {
             // Сброс значений по умолчанию.
             if(actions.payload === 'RESET') {
-                state.filterDataFlights = defaultFilterDataFlights;
+                state.filterData = {};
                 return;
             }
             // Если передано значение для сортировки по больше/меньше, то выполняется.
             if(actions.payload?.moreLessId) {
                 // Установка фильтраций по определенному столбцу больше/меньше.
-                if(state.filterDataFlights.moreLessId === actions.payload.moreLessId) {
-                    state.filterDataFlights = {...state.filterDataFlights, moreLessState: !state.filterDataFlights.moreLessState};
+                if(state.filterData?.moreLessId === actions.payload.moreLessId) {
+                    state.filterData = {...state.filterData, moreLessState: !state.filterData.moreLessState};
                     return;
                 } else {
-                    state.filterDataFlights = {...state.filterDataFlights, moreLessId: actions.payload.moreLessId, moreLessState: true};
+                    state.filterData = {...state.filterData, moreLessId: actions.payload.moreLessId, moreLessState: true};
                     return;
                 }
             } else {
                 // Установка значений для фильтрации.
-                state.filterDataFlights = {...state.filterDataFlights, ...actions.payload};
+                state.filterData = {...state.filterData, ...actions.payload};
             }
         }
     }
@@ -86,5 +84,5 @@ export const {
     setTotalLineInPage,
     setCurrentPage,
     setTotalAllPage,
-    setFilterDataFlights
+    setFilterData
 } = actions;

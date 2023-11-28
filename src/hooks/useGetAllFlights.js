@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { setFilterData } from '../redux/slice/sliceForm.js';
 import { setCurentDataFlights, setTotalAllPage } from '../redux/slice/sliceForm.js';
 import { httpSQL } from '../service/http.service.js';
 import delayFnc from '../helpers/delay.js';
@@ -6,13 +7,13 @@ import { useEffect, useRef } from 'react';
 import '../types.js';
 
 
-const useGetAllFlights = () => {
-
+const useGetAllFlights = (table) => {
+    console.log('useGetAllFlights',);
     const dispatch = useDispatch();
     // первый ли это рендер компонента
     const isFirstRender = useRef(true);
 
-    const filterDataFlights = useSelector(state => state.sliceForm.filterDataFlights);
+    const filterData = useSelector(state => state.sliceForm.filterData);
     /**
      * Установленое количество отображаемых записей.
      * @type {number}
@@ -35,13 +36,14 @@ const useGetAllFlights = () => {
      */
     const updateAllFlights = () => {
         httpSQL
-            .post(`/flights-data?total=${totalLineInPage}&page=${currentPage}`, {...filterDataFlights})
+            .post(`/filter-data/flights?total=${totalLineInPage}&page=${currentPage}`, {...filterData})
             .then(res => {
                 dispatch( setCurentDataFlights(res.data.dataFlights) );
                 dispatch( setTotalAllPage({flights: res.data.totalPages}) );
             })
             .catch(error => console.error(error));
     };
+    
 
     useEffect(() => {
         if(!isFirstRender.current) {
@@ -49,7 +51,8 @@ const useGetAllFlights = () => {
         } else {
             isFirstRender.current = false;
         }
-    },[filterDataFlights]); // eslint-disable-line 
+    },[filterData]); // eslint-disable-line 
+
     
     return {
         updateAllFlights,

@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentPage } from '../redux/slice/sliceForm.js';
 
-
 /**
  * @typedef {Object} HookReturnUseTable
  * @property {number} selectedLine - Id выбранного обьекта для редактирования или удаления.
@@ -13,7 +12,7 @@ import { setCurrentPage } from '../redux/slice/sliceForm.js';
  */
 
 /**
- * Hook для работы с таблицами Booking и Flights.
+ * Hook для работы с таблицами Booking и Flights, редактирование/удаление.
  * @param {string} path - Путь адресной строки ("/delete-booking").
  * @param  {Function[]} upDateFunctions - Функции обновления глобальный данных.
  * @example

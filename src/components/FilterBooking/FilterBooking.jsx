@@ -1,5 +1,5 @@
 import '../../page/Booking/booking.scss';
-import './filterFlights.scss';
+import '../FilterFlights/filterFlights.scss';
 import '../../types';
 import { setFilterData } from '../../redux/slice/sliceForm';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,14 +10,17 @@ import { useEffect } from 'react';
  * COMPONENT > Блок в верху таблицы для установки фильтрации данных.
  * @component
  * @example
- * <FilterFlights/>
+ * <FilterBooking/>
  */
-//= FilterFlights 
-const FilterFlights = () => {
+//= FilterBooking 
+const FilterBooking = () => {
 
     const dispatch = useDispatch();
+    /**
+     * @type {FilterData}
+     */
     const filterData = useSelector(state => state.sliceForm.filterData);
-
+    // Добавление фильтра.
     const filter = (event) => {
         const target = event.target;
         const id = target.id;
@@ -51,8 +54,28 @@ const FilterFlights = () => {
             </th>
             <th scope="col">
                 <input 
-                    id="city" 
-                    value={filterData?.city ?? ''}
+                    id="surname" 
+                    value={filterData?.surname ?? ''}
+                    onChange={filter} 
+                    className="table-input" 
+                    type="text" 
+                    autoComplete="off"
+                />
+            </th>
+            <th scope="col">
+                <input 
+                    id="name" 
+                    value={filterData?.name ?? ''}
+                    onChange={filter} 
+                    className="table-input" 
+                    type="text" 
+                    autoComplete="off"
+                />
+            </th>
+            <th scope="col">
+                <input 
+                    id="middleName" 
+                    value={filterData?.middleName ?? ''}
                     onChange={filter} 
                     className="table-input" 
                     type="text" 
@@ -71,28 +94,8 @@ const FilterFlights = () => {
             </th>
             <th scope="col">
                 <input 
-                    id="company" 
-                    value={filterData?.company ?? ''}
-                    onChange={filter} 
-                    className="table-input" 
-                    type="text" 
-                    autoComplete="off"
-                />
-            </th>
-            <th scope="col">
-                <input 
-                    id="checkIn" 
-                    value={filterData?.checkIn ?? ''}
-                    onChange={filter} 
-                    className="table-input" 
-                    type="date" 
-                    autoComplete="off"
-                />
-            </th>
-            <th scope="col">
-                <input 
-                    id="freePlace" 
-                    value={filterData?.freePlace ?? ''}
+                    id="sit" 
+                    value={filterData?.sit ?? ''}
                     onChange={filter} 
                     className="table-input" 
                     type="number" 
@@ -106,4 +109,4 @@ const FilterFlights = () => {
     );
 };
 
-export default FilterFlights;
+export default FilterBooking;

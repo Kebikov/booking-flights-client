@@ -3,16 +3,18 @@ import '../../scss/public.scss';
 import '../../types.js';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentPage, setTotalLineInPage } from '../../redux/slice/sliceForm';
-import { httpSQL } from '../../service/http.service.js';
+import { setCurrentPage, setTotalLineInPage, setFilterData } from '../../redux/slice/sliceForm';
 import { useEffect } from 'react';
-import delayFnc from '../../helpers/delay';
+
+/**
+ * @typedef {'flights' | 'booking'} Table
+ */
 
 /**
  * @typedef {Object} Propse
  * @property {number} choice - State, id выбранного обьекта для редактирования или удаления.
  * @property {Function} deleteElement - Function, удаление брони.
- * @property {string} table - Имя таблицы.
+ * @property {Table} table - Имя таблицы.
  */
 
 /** 
@@ -23,8 +25,6 @@ import delayFnc from '../../helpers/delay';
  *     choice={...} 
  *     deleteElement={...} 
  *     table={...} 
- *     filterState={...} 
- *     setFilterState={...}
  * />
  * @param {Propse} 
  */
@@ -48,12 +48,10 @@ const TableControl = ({choice, deleteElement, table}) => {
         pathAdd = '';
         pathEdit = '';
         break;
-
     };
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    
     /**
      * @type {number} totalLineInPage 
      * - Установленое количество отображаемых записей.
@@ -91,6 +89,7 @@ const TableControl = ({choice, deleteElement, table}) => {
             navigate(`${pathEdit}/${choice}`);
         }
     };
+
 
     return(
         <div className="table-control">
