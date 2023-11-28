@@ -1,7 +1,7 @@
 import '../../page/Booking/booking.scss';
 import '../FilterFlights/filterFlights.scss';
 import '../../types';
-import { setFilterData } from '../../redux/slice/sliceForm';
+import { setFilterBooking } from '../../redux/slice/sliceForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -19,24 +19,24 @@ const FilterBooking = () => {
     /**
      * @type {FilterData}
      */
-    const filterData = useSelector(state => state.sliceForm.filterData);
+    const filterBooking = useSelector(state => state.sliceForm.filterBooking);
     // Добавление фильтра.
     const filter = (event) => {
         const target = event.target;
         const id = target.id;
         const value = target.value;
 
-        dispatch( setFilterData({[id]: value}) );
+        dispatch( setFilterBooking({[id]: value}) );
     };
     // Сброс значений по умолчанию.
     const reset = () => {
-        dispatch( setFilterData('RESET') );
+        dispatch( setFilterBooking('RESET') );
     };
 
     useEffect(() => {
         // Сброс значений по умолчанию при размонтировании компонента.
         return () => {
-            dispatch( setFilterData('RESET') );
+            dispatch( setFilterBooking('RESET') );
         };
     },[]); // eslint-disable-line
 
@@ -45,7 +45,7 @@ const FilterBooking = () => {
             <th scope="col">
                 <input 
                     id="route" 
-                    value={filterData?.route ?? ''}
+                    value={filterBooking?.route ?? ''}
                     onChange={filter} 
                     className="table-input" 
                     type="text" 
@@ -55,7 +55,7 @@ const FilterBooking = () => {
             <th scope="col">
                 <input 
                     id="surname" 
-                    value={filterData?.surname ?? ''}
+                    value={filterBooking?.surname ?? ''}
                     onChange={filter} 
                     className="table-input" 
                     type="text" 
@@ -65,7 +65,7 @@ const FilterBooking = () => {
             <th scope="col">
                 <input 
                     id="name" 
-                    value={filterData?.name ?? ''}
+                    value={filterBooking?.name ?? ''}
                     onChange={filter} 
                     className="table-input" 
                     type="text" 
@@ -75,7 +75,7 @@ const FilterBooking = () => {
             <th scope="col">
                 <input 
                     id="middleName" 
-                    value={filterData?.middleName ?? ''}
+                    value={filterBooking?.middleName ?? ''}
                     onChange={filter} 
                     className="table-input" 
                     type="text" 
@@ -85,7 +85,7 @@ const FilterBooking = () => {
             <th scope="col">
                 <input 
                     id="date" 
-                    value={filterData?.date ?? ''}
+                    value={filterBooking?.date ?? ''}
                     onChange={filter} 
                     className="table-input" 
                     type="date" 
@@ -95,7 +95,7 @@ const FilterBooking = () => {
             <th scope="col">
                 <input 
                     id="sit" 
-                    value={filterData?.sit ?? ''}
+                    value={filterBooking?.sit ?? ''}
                     onChange={filter} 
                     className="table-input" 
                     type="number" 

@@ -58,6 +58,7 @@ const useTable = (path, ...upDateFunctions) => {
             .then(res => {
                 const msg = res.data?.msg;
                 if(msg === 'ENTRY_DELETED') {
+                    console.log('ENTRY_DELETED');
                     setSelectedLine(null);
                     upDateFunctions.forEach(someFunction => someFunction());
                 } else {

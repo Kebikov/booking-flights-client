@@ -26,15 +26,15 @@ const Flights = () => {
     const {updateAllFlights, curentDataFlights} = useGetAllFlights('flights');
 
     const {choiceLine, deleteLine, selectedLine} = useTable('/delete-flights', updateAllFlights);
-    console.log('',curentDataFlights);
-    const infoFlights = curentDataFlights.map((order, i) => 
-        <LineForTableFlights order={order} choiceLine={choiceLine} selectedLine={selectedLine} key={i} />
-    );
+    
+    const infoFlights = curentDataFlights.map((order, i) => {
+        return <LineForTableFlights order={order} choiceLine={choiceLine} selectedLine={selectedLine} key={i} />;
+    });
 
 
     return(
         <>
-            <div className="table-booking">
+            <div className="table-booking mt-2">
                 <table className="table _width-table">
                     <thead>
                         <HeaderForTableFlights/>

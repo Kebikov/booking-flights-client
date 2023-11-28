@@ -65,12 +65,13 @@ const FormBooking = () => {
      */
     const change = (event) => changeInput(event, setStateForm, setIsPermitSubmitForm);
 
+
     return(
         <div className="popup-form-flights">
             <div className="popup-form-flights__body">
-                <form className="form-floating" onSubmit={submitFormBooking} >
+                <form className="form-floating popup-form-flights__form" onSubmit={submitFormBooking} >
                     {/*//* рейс */}
-                    <div className="col-md-4 popup-form-flights__col">
+                    <div className="col-md-4 popup-form-flights__input">
                         <label htmlFor="route" className="form-label">Рейс</label>
                         <input 
                             id="route" 
@@ -91,7 +92,7 @@ const FormBooking = () => {
                         </div>
                     </div>
                     {/*//* Фамилия */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="surname" className="form-label">Фамилия</label>
                         <input 
                             id="surname" 
@@ -111,7 +112,7 @@ const FormBooking = () => {
                         </div>
                     </div>
                     {/*//* имя */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="name" className="form-label">Имя</label>
                         <input 
                             id="name" 
@@ -131,7 +132,7 @@ const FormBooking = () => {
                         </div>
                     </div>
                     {/*//* Отчество */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="middleName" className="form-label">Отчество</label>
                         <input 
                             id="middleName"
@@ -151,7 +152,7 @@ const FormBooking = () => {
                         </div>
                     </div>
                     {/*//* Примечание */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="note" className="form-label">Примечание</label>
                         <input 
                             id="note"
@@ -163,28 +164,29 @@ const FormBooking = () => {
                             autoComplete="off"
                         />
                     </div>
-                    <button 
-                        type="submit" 
-                        className="btn btn-primary mt-4"
-                        style={
-                            isPermitSubmitForm ?
-                                null
-                                :
-                                {pointerEvents: 'none'}
-                        }
-                    >
-                        {isPermitSubmitForm ? 'отправить' : 'проверка...'}
-                    </button>
-                    <button 
-                        type="submit" 
-                        className="btn btn-secondary mt-4" 
-                        style={{marginLeft: '20px'}} 
-                        onClick={() => navigate(-1)}
-                    >
-                        отмена
-                    </button>
+                    <div className="popup-form-flights__buttons">
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary mt-4"
+                            style={
+                                isPermitSubmitForm ?
+                                    null
+                                    :
+                                    {pointerEvents: 'none'}
+                            }
+                        >
+                            {isPermitSubmitForm ? 'отправить' : 'проверка...'}
+                        </button>
+                        <button 
+                            type="submit" 
+                            className="btn btn-secondary mt-4" 
+                            style={{marginLeft: '20px'}} 
+                            onClick={() => navigate(-1)}
+                        >
+                            отмена
+                        </button>
+                    </div>
                 </form>
-                
             </div>
         </div>
     );

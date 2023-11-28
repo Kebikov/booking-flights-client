@@ -7,7 +7,7 @@
         "no-console": ["warn", { "allow": ["error"] }], 
         "quotes": ["error", "single"], 
         "jsx-quotes": ["warn", "prefer-double"], 
-        "indent": ["warn", 4], 
+        "indent": ["warn", 4, { "SwitchCase": 1 }], 
         "max-len": ["warn", {"code": 140}], 
         "comma-dangle": ["error", "never"], 
         "semi": ["warn", "always"]

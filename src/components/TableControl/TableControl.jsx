@@ -3,8 +3,7 @@ import '../../scss/public.scss';
 import '../../types.js';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentPage, setTotalLineInPage, setFilterData } from '../../redux/slice/sliceForm';
-import { useEffect } from 'react';
+import { setCurrentPage, setTotalLineInPage } from '../../redux/slice/sliceForm';
 
 /**
  * @typedef {'flights' | 'booking'} Table
@@ -35,19 +34,18 @@ const TableControl = ({choice, deleteElement, table}) => {
     let pathEdit;
 
     switch (table) { 
-
-    case 'flights':
-        pathAdd = '/add-flights';
-        pathEdit = '/edit-flights';
-        break;
-    case 'booking':
-        pathAdd = '/add-booking';
-        pathEdit = '/edit-booking';
-        break;
-    default: 
-        pathAdd = '';
-        pathEdit = '';
-        break;
+        case 'flights':
+            pathAdd = '/add-flights';
+            pathEdit = '/edit-flights';
+            break;
+        case 'booking':
+            pathAdd = '/add-booking';
+            pathEdit = '/edit-booking';
+            break;
+        default: 
+            pathAdd = '';
+            pathEdit = '';
+            break;
     };
 
     const navigate = useNavigate();

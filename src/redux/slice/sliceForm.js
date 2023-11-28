@@ -1,11 +1,35 @@
 import { createSlice } from '@reduxjs/toolkit';
 import '../../types.js'; 
 
+const setFilter = (state, actions, filterName) => {
+    // Сброс значений по умолчанию.
+    if(actions.payload === 'RESET') {
+        state[filterName] = {};
+        return;
+    }
+    // Если передано значение для сортировки по больше/меньше, то выполняется.
+    if(actions.payload?.moreLessId) {
+        // Установка фильтраций по определенному столбцу больше/меньше.
+        if(state[filterName]?.moreLessId === actions.payload.moreLessId) {
+            state[filterName] = {...state[filterName], moreLessState: !state[filterName].moreLessState};
+            return;
+        } else {
+            state[filterName] = {...state[filterName], moreLessId: actions.payload.moreLessId, moreLessState: true};
+            return;
+        }
+    } else {
+        // Установка значений для фильтрации.
+        state[filterName] = {...state[filterName], ...actions.payload};
+    }
+};
+
 /**
  * @typedef {Object} InitialState
  * @property {FlightsData} curentDataFlights - Тукушее загруженые обьекты  рейсов.
- * @property {FilterData} filterData - Обьект c данными, для фильтрации рейсов.
- * @property {BookingData} curentDataBooking - Тукушее загруженые обьекты  брони.
+ * @property {FilterFlights} filterFlights - Обьект c данными, для фильтрации Flights.
+ * @property {FilterBooking} filterBooking - Обьект c данными, для фильтрации Booking.
+ * @property {BookingData} curentDataBooking - Тукушее загруженые обьекты Flights.
+ * @property {FlightsData} curentDataFlights - Тукушее загруженые обьекты Booking.
  * @property {TotalAllPage} totalAllPageObj - Обьект с обшим количеством страниц Booking и Flights.
  * @property {number} totalLineInPage - Установленое количество отображаемых записей на странице за раз.
  * @property {number} currentPage - Установленый номер текушей просматриваемой страницы.
@@ -16,12 +40,16 @@ import '../../types.js';
  */
 const initialState = {
     curentDataFlights: [],
-    filterData: {},
     curentDataBooking: [], 
+
+    filterFlights: {},
+    filterBooking: {},
+
     totalAllPageObj: {
         booking: 0,
         flights: 0
     },
+    
     totalLineInPage: 5,
     currentPage: 1
 };
@@ -50,29 +78,15 @@ const sliceForm = createSlice({
         setTotalAllPage: (state, actions) => {
             state.totalAllPageObj = {...state.totalAllPageObj, ...actions.payload};
         },
-        setFilterData: (state, actions) => {
-            // Сброс значений по умолчанию.
-            if(actions.payload === 'RESET') {
-                state.filterData = {};
-                return;
-            }
-            // Если передано значение для сортировки по больше/меньше, то выполняется.
-            if(actions.payload?.moreLessId) {
-                // Установка фильтраций по определенному столбцу больше/меньше.
-                if(state.filterData?.moreLessId === actions.payload.moreLessId) {
-                    state.filterData = {...state.filterData, moreLessState: !state.filterData.moreLessState};
-                    return;
-                } else {
-                    state.filterData = {...state.filterData, moreLessId: actions.payload.moreLessId, moreLessState: true};
-                    return;
-                }
-            } else {
-                // Установка значений для фильтрации.
-                state.filterData = {...state.filterData, ...actions.payload};
-            }
+        setFilterFlights: (state, actions) => {
+            setFilter(state, actions, 'filterFlights');
+        },
+        setFilterBooking: (state, actions) => {
+            setFilter(state, actions, 'filterBooking');
         }
     }
 });
+
 
 const {reducer, actions} = sliceForm;
 
@@ -84,5 +98,6 @@ export const {
     setTotalLineInPage,
     setCurrentPage,
     setTotalAllPage,
-    setFilterData
+    setFilterFlights,
+    setFilterBooking
 } = actions;

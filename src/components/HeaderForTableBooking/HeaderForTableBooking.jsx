@@ -1,5 +1,5 @@
 import '../../scss/public.scss';
-import { setFilterData } from '../../redux/slice/sliceForm';
+import { setFilterBooking } from '../../redux/slice/sliceForm';
 import { useDispatch } from 'react-redux';
 
 /**
@@ -17,7 +17,7 @@ const HeaderForTableBooking = () => {
 
     const filter = (event) => {
         const moreLessId = event.target.getAttribute('data-id');
-        dispatch( setFilterData({moreLessId}) );
+        dispatch( setFilterBooking({moreLessId}) );
     };
 
     return(

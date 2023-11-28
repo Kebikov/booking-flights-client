@@ -42,24 +42,26 @@ const Booking = () => {
 
     
     return(
-        <div className="table-booking">
-            <table className="table">
-                <thead>
-                    <HeaderForTableBooking/>
-                </thead>
-                <thead>
-                    <FilterBooking/>
-                </thead>
-                <tbody>
-                    {infoBooking}
-                </tbody>
-            </table>
+        <>
+            <div className="table-booking mt-2">
+                <table className="table _width-table">
+                    <thead>
+                        <HeaderForTableBooking/>
+                    </thead>
+                    <thead>
+                        <FilterBooking/>
+                    </thead>
+                    <tbody>
+                        {infoBooking}
+                    </tbody>
+                </table>
+            </div>
             <TableControl 
                 choice={selectedLine} 
                 deleteElement={deleteLine} 
                 table={'booking'}
             />
-        </div>
+        </>
     );
 };
 

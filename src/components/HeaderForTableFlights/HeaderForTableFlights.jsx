@@ -1,5 +1,5 @@
 import '../../scss/public.scss';
-import { setFilterData } from '../../redux/slice/sliceForm';
+import { setFilterFlights } from '../../redux/slice/sliceForm';
 import { useDispatch } from 'react-redux';
 
 /**
@@ -17,7 +17,7 @@ const HeaderForTableFlights = () => {
 
     const filter = (event) => {
         const moreLessId = event.target.getAttribute('data-id');
-        dispatch( setFilterData({moreLessId}) );
+        dispatch( setFilterFlights({moreLessId}) );
     };
 
     return(

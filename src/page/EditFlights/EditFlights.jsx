@@ -1,4 +1,5 @@
 import '../../scss/public.scss';
+import 'bootstrap/dist/css/bootstrap.css';
 import EditFormFlights from '../../components/EditFormFlights/EditFormFlights';
 import { useParams } from 'react-router-dom';
 
@@ -14,7 +15,7 @@ const EditFlights = () => {
 
     return(
         <>
-            <div className="title-page">Редактирование рейса</div>
+            <div className="title-page mt-2">Редактирование рейса</div>
             <EditFormFlights id={ Number(id) } />
         </>
     );

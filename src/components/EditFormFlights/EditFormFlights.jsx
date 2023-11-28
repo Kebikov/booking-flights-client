@@ -78,9 +78,9 @@ const EditFormFlights = ({id}) => {
     return(
         <div className="popup-form-flights">
             <div className="popup-form-flights__body">
-                <form className="form-floating" onSubmit={submitFormFlights} >
+                <form className="form-floating popup-form-flights__form" onSubmit={submitFormFlights} >
                     {/*//* дата */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="dateRoute" className="form-label">Дата рейса</label>
                         <input 
                             id="dateRoute" 
@@ -99,7 +99,7 @@ const EditFormFlights = ({id}) => {
                         </div>
                     </div>
                     {/*//* время */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="timeRoute" className="form-label">Время рейса</label>
                         <input 
                             id="timeRoute"
@@ -117,7 +117,7 @@ const EditFormFlights = ({id}) => {
                         </div>
                     </div>
                     {/*//* дата регистрации*/}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="dateRegistration" className="form-label">Дата регистрации</label>
                         <input 
                             id="dateRegistration"
@@ -135,7 +135,7 @@ const EditFormFlights = ({id}) => {
                         </div>
                     </div>
                     {/*//* время регистрации*/}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="timeRegistration" className="form-label">Время регистрации</label>
                         <input 
                             id="timeRegistration" 
@@ -152,27 +152,28 @@ const EditFormFlights = ({id}) => {
                             Регистрация минимум за 30 минут до рейса.
                         </div>
                     </div>
-                    
-                    <button 
-                        type="submit" 
-                        className="btn btn-primary mt-4"
-                        style={
-                            isPermitSubmitForm ?
-                                null
-                                :
-                                {pointerEvents: 'none'}
-                        }
-                    >
-                        {isPermitSubmitForm ? 'отправить' : 'проверка...'}
-                    </button>
-                    <button 
-                        type="button" 
-                        className="btn btn-secondary mt-4" 
-                        style={{marginLeft: '20px'}} 
-                        onClick={() => navigate(-1)}
-                    >
-                        отмена
-                    </button>
+                    <div className="popup-form-flights__buttons">
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary mt-4"
+                            style={
+                                isPermitSubmitForm ?
+                                    null
+                                    :
+                                    {pointerEvents: 'none'}
+                            }
+                        >
+                            {isPermitSubmitForm ? 'отправить' : 'проверка...'}
+                        </button>
+                        <button 
+                            type="button" 
+                            className="btn btn-secondary mt-4" 
+                            style={{marginLeft: '20px'}} 
+                            onClick={() => navigate(-1)}
+                        >
+                            отмена
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

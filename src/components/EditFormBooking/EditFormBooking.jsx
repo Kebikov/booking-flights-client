@@ -89,9 +89,9 @@ const EditFormBooking = ({id}) => {
     return(
         <div className="popup-form-flights">
             <div className="popup-form-flights__body">
-                <form className="form-floating" onSubmit={submitFormBooking} >
+                <form className="form-floating popup-form-flights__form" onSubmit={submitFormBooking} >
                     {/*//* Фамилия */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="surname" className="form-label">Фамилия</label>
                         <input 
                             id="surname" 
@@ -112,7 +112,7 @@ const EditFormBooking = ({id}) => {
                         </div>
                     </div>
                     {/*//* имя */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="name" className="form-label">Имя</label>
                         <input 
                             id="name" 
@@ -133,7 +133,7 @@ const EditFormBooking = ({id}) => {
                         </div>
                     </div>
                     {/*//* Отчество */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="middleName" className="form-label">Отчество</label>
                         <input 
                             id="middleName"
@@ -153,26 +153,28 @@ const EditFormBooking = ({id}) => {
                             В отчестве далжны быть только буквы.
                         </div>
                     </div>
-                    <button 
-                        type="submit" 
-                        className="btn btn-primary mt-4"
-                        style={
-                            isPermitSubmitForm ?
-                                null
-                                :
-                                {pointerEvents: 'none'}
-                        }
-                    >
-                        {isPermitSubmitForm ? 'отправить' : 'проверка...'}
-                    </button>
-                    <button 
-                        type="button" 
-                        className="btn btn-secondary mt-4" 
-                        style={{marginLeft: '20px'}} 
-                        onClick={() => navigate(-1)}
-                    >
-                        отмена
-                    </button>
+                    <div className="popup-form-flights__buttons">
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary mt-4"
+                            style={
+                                isPermitSubmitForm ?
+                                    null
+                                    :
+                                    {pointerEvents: 'none'}
+                            }
+                        >
+                            {isPermitSubmitForm ? 'отправить' : 'проверка...'}
+                        </button>
+                        <button 
+                            type="button" 
+                            className="btn btn-secondary mt-4" 
+                            style={{marginLeft: '20px'}} 
+                            onClick={() => navigate(-1)}
+                        >
+                            отмена
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

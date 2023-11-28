@@ -62,9 +62,9 @@ const FormFlights = () => {
     return(
         <div className="popup-form-flights">
             <div className="popup-form-flights__body">
-                <form className="form-floating" onSubmit={submitFormFlights} >
+                <form className="form-floating popup-form-flights__form" onSubmit={submitFormFlights} >
                     {/*//* рейс */}
-                    <div className="col-md-4 popup-form-flights__col">
+                    <div className="col-md-4 popup-form-flights__input">
                         <label htmlFor="route" className="form-label">Рейс</label>
                         <input 
                             id="route" 
@@ -84,7 +84,7 @@ const FormFlights = () => {
                         </div>
                     </div>
                     {/*//* город */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="city" className="form-label">Город</label>
                         <input 
                             id="city" 
@@ -104,7 +104,7 @@ const FormFlights = () => {
                         </div>
                     </div>
                     {/*//* дата */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="dateRoute" className="form-label">Дата рейса</label>
                         <input 
                             id="dateRoute" 
@@ -122,7 +122,7 @@ const FormFlights = () => {
                         </div>
                     </div>
                     {/*//* время */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="timeRoute" className="form-label">Время рейса</label>
                         <input 
                             id="timeRoute"
@@ -139,7 +139,7 @@ const FormFlights = () => {
                         </div>
                     </div>
                     {/*//* Авиакомпания */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="company" className="form-label">Авиакомпания</label>
                         <input 
                             id="company"
@@ -159,7 +159,7 @@ const FormFlights = () => {
                         </div>
                     </div>
                     {/*//* Количество свободных мест */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="freePlace" className="form-label">Количество свободных мест</label>
                         <input 
                             id="freePlace"
@@ -177,7 +177,7 @@ const FormFlights = () => {
                         </div>
                     </div>
                     {/*//* дата регистрации*/}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="dateRegistration" className="form-label">Дата регистрации</label>
                         <input 
                             id="dateRegistration" 
@@ -194,7 +194,7 @@ const FormFlights = () => {
                         </div>
                     </div>
                     {/*//* время регистрации*/}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="timeRegistration" className="form-label">Время регистрации</label>
                         <input 
                             id="timeRegistration" 
@@ -211,7 +211,7 @@ const FormFlights = () => {
                         </div>
                     </div>
                     {/*//* Примечание */}
-                    <div className="col-md-4 mt-2 popup-form-flights__col">
+                    <div className="col-md-4 mt-2 popup-form-flights__input">
                         <label htmlFor="note" className="form-label">Примечание</label>
                         <input 
                             id="note"
@@ -223,28 +223,29 @@ const FormFlights = () => {
                             autoComplete="off"
                         />
                     </div>
-                    <button 
-                        type="submit" 
-                        className="btn btn-primary mt-4"
-                        style={
-                            isPermitSubmitForm ?
-                                null
-                                :
-                                {pointerEvents: 'none'}
-                        }
-                    >
-                        {isPermitSubmitForm ? 'отправить' : 'проверка...'}
-                    </button>
-                    <button 
-                        type="submit" 
-                        className="btn btn-secondary mt-4" 
-                        style={{marginLeft: '20px'}} 
-                        onClick={() => navigate(-1)}
-                    >
-                        отмена
-                    </button>
+                    <div className="popup-form-flights__buttons">
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary mt-4"
+                            style={
+                                isPermitSubmitForm ?
+                                    null
+                                    :
+                                    {pointerEvents: 'none'}
+                            }
+                        >
+                            {isPermitSubmitForm ? 'отправить' : 'проверка...'}
+                        </button>
+                        <button 
+                            type="submit" 
+                            className="btn btn-secondary mt-4" 
+                            style={{marginLeft: '20px'}} 
+                            onClick={() => navigate(-1)}
+                        >
+                            отмена
+                        </button>
+                    </div>
                 </form>
-                
             </div>
         </div>
     );
