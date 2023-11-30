@@ -1,8 +1,8 @@
 import '../types.js'; 
 import { useState, useEffect } from 'react';
-import delayFnc from '../helpers/delay.js';
+import delayFnc from '../helpers/delay/delay.js';
 import { httpSQL } from '../service/http.service.js';
-import isOnlyLetter from '../helpers/isOnlyLetter.js';
+import isOnlyLetter from '../helpers/isOnlyLetter/isOnlyLetter.js';
 
 
 const useFormBooking = () => {

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurentDataBooking, setTotalAllPage } from '../redux/slice/sliceForm.js';
 import { httpSQL } from '../service/http.service.js';
 import { useRef, useEffect } from 'react';
-import delayFnc from '../helpers/delay.js';
+import delayFnc from '../helpers/delay/delay.js';
 
 
 

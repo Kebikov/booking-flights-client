@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { httpSQL } from '../service/http.service.js';
 import '../types.js';
-import delayFnc from '../helpers/delay.js';
-import isOnlyLetter from '../helpers/isOnlyLetter.js';
+import delayFnc from '../helpers/delay/delay.js';
+import isOnlyLetter from '../helpers/isOnlyLetter/isOnlyLetter.js';
 
 const useFormFlights = () => {
     /** 

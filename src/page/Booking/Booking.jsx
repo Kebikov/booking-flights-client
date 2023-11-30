@@ -1,6 +1,6 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import './booking.scss';
-import '../../scss/public.scss';
+// import 'bootstrap/dist/css/bootstrap.css';
+// import './booking.scss';
+// import '../../scss/public.scss';
 import '../../types';
 import useGetAllBooking from '../../hooks/useGetAllBooking.js';
 import useGetAllFlights from '../../hooks/useGetAllFlights.js';

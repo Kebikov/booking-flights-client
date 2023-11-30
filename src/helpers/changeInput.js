@@ -8,6 +8,7 @@ function changeInput(event, setStateForm, setIsPermitSubmitForm) {
     const target = event.target;
     const id = target.id;
     const value = target.value;
+    
     setStateForm(state => ( {...state, [id]: value, id, target, value} ));
     setIsPermitSubmitForm(false);
 };

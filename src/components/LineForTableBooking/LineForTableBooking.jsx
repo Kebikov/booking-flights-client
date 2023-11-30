@@ -1,4 +1,4 @@
-import convertFormatData from '../../helpers/convertFormatData';
+import convertFormatData from '../../helpers/convertFormatData/convertFormatData';
 
 /**
  * COMPONENT > строки для таблицы полетов.
