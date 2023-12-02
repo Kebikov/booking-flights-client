@@ -26,7 +26,8 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "lint": "eslint .",
-        "lint:fix": "npm run lint -- --fix"
+        "lint:fix": "npm run lint -- --fix",
+        "jest": "jest"
     },
     "browserslist": {
         "production": [
@@ -48,13 +49,6 @@
         "babel-jest": "^29.7.0",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^27.5.1"
-    },
-    "jest": {
-        "transform": {
-            "^.+\\.jsx?$": "babel-jest"
-        },
-        "moduleNameMapper": {
-            "axios": "axios/dist/node/axios.cjs"
-        }
     }
 }
+

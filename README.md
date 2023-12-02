@@ -1,5 +1,15 @@
 // eslint-disable-line
 
+,
+    "jest": {
+        "transform": {
+            "^.+\\.jsx?$": "babel-jest"
+        },
+        "moduleNameMapper": {
+            "axios": "axios/dist/node/axios.cjs"
+        }
+    }
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
