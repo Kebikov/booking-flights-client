@@ -67,7 +67,7 @@ const FormFlights = () => {
                     <div className="col-md-4 popup-form-flights__input">
                         <label htmlFor="route" className="form-label">Рейс</label>
                         <input 
-                            id="route" 
+                            id="route"
                             onChange={change}
                             type="text" 
                             className="form-control" 
@@ -79,7 +79,7 @@ const FormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="route" className="invalid-feedback">
+                        <div className="invalid-feedback">
                             Введите уникальное имя рейса.
                         </div>
                     </div>
@@ -99,7 +99,7 @@ const FormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="city" className="invalid-feedback">
+                        <div className="invalid-feedback">
                             Разрешены только буквы.
                         </div>
                     </div>
@@ -108,6 +108,7 @@ const FormFlights = () => {
                         <label htmlFor="dateRoute" className="form-label">Дата рейса</label>
                         <input 
                             id="dateRoute" 
+                            data-testid = "date"
                             onChange={change}
                             type="date" 
                             className={stateClassInputDate}
@@ -117,7 +118,7 @@ const FormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="dateRoute" className="invalid-feedback">
+                        <div className="invalid-feedback">
                             Выберите другую дату или время рейса.
                         </div>
                     </div>
@@ -126,6 +127,7 @@ const FormFlights = () => {
                         <label htmlFor="timeRoute" className="form-label">Время рейса</label>
                         <input 
                             id="timeRoute"
+                            data-testid = "date"
                             onChange={change}
                             type="time" 
                             className={stateClassInputDate}
@@ -134,7 +136,7 @@ const FormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="timeRoute" className="invalid-feedback">
+                        <div className="invalid-feedback">
                             Выберите другую дату или время рейса.
                         </div>
                     </div>
@@ -154,7 +156,7 @@ const FormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="company" className="invalid-feedback">
+                        <div className="invalid-feedback">
                             Разрешены только буквы.
                         </div>
                     </div>
@@ -172,7 +174,7 @@ const FormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="freePlace" className="invalid-feedback">
+                        <div className="invalid-feedback">
                             Max 99 мест в самолете, разрешены только цыфры.
                         </div>
                     </div>
@@ -181,6 +183,7 @@ const FormFlights = () => {
                         <label htmlFor="dateRegistration" className="form-label">Дата регистрации</label>
                         <input 
                             id="dateRegistration" 
+                            data-testid = "date"
                             onChange={change}
                             type="date" 
                             className={stateClassDateRegistration}
@@ -189,7 +192,7 @@ const FormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="dateRegistration" className="invalid-feedback">
+                        <div className="invalid-feedback">
                             Регистрация минимум за 30 минут до рейса.
                         </div>
                     </div>
@@ -198,6 +201,7 @@ const FormFlights = () => {
                         <label htmlFor="timeRegistration" className="form-label">Время регистрации</label>
                         <input 
                             id="timeRegistration" 
+                            data-testid = "date"
                             onChange={change}
                             type="time" 
                             className={stateClassDateRegistration}
@@ -206,7 +210,7 @@ const FormFlights = () => {
                         <div className="valid-feedback">
                             ok!
                         </div>
-                        <div id="timeRegistration" className="invalid-feedback">
+                        <div className="invalid-feedback">
                             Регистрация минимум за 30 минут до рейса.
                         </div>
                     </div>

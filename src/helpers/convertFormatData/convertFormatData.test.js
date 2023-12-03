@@ -1,4 +1,4 @@
-import convertFormatData from './convertFormatData';
+import convertFormatData from './convertFormatData.js';
 
 describe('convertFormatData', () => {
 
